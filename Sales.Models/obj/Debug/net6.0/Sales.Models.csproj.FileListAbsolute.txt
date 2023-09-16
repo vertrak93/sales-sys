@@ -1,0 +1,12 @@
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\bin\Debug\net6.0\Sales.Models.deps.json
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\bin\Debug\net6.0\Sales.Models.dll
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\bin\Debug\net6.0\Sales.Models.pdb
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\Sales.Models.csproj.AssemblyReference.cache
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\Sales.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\Sales.Models.AssemblyInfoInputs.cache
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\Sales.Models.AssemblyInfo.cs
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\Sales.Models.csproj.CoreCompileInputs.cache
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\Sales.Models.dll
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\refint\Sales.Models.dll
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\Sales.Models.pdb
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Models\obj\Debug\net6.0\ref\Sales.Models.dll

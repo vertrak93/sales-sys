@@ -1,0 +1,17 @@
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\bin\Debug\net6.0\Sales.Data.deps.json
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\bin\Debug\net6.0\Sales.Data.runtimeconfig.json
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\bin\Debug\net6.0\Sales.Data.dll
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\bin\Debug\net6.0\Sales.Data.pdb
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\bin\Debug\net6.0\Sales.Models.dll
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\bin\Debug\net6.0\Sales.Models.pdb
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.csproj.AssemblyReference.cache
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.AssemblyInfoInputs.cache
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.AssemblyInfo.cs
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.csproj.CoreCompileInputs.cache
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.csproj.CopyComplete
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.dll
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\refint\Sales.Data.dll
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.pdb
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\Sales.Data.genruntimeconfig.cache
+C:\Users\pedro\Escritorio\Desarrollo\DotNet\Sales\Sales.Data\obj\Debug\net6.0\ref\Sales.Data.dll
