@@ -21,6 +21,6 @@ namespace Sales.Data.UnitOfWork
         public IRepository<UserRole> UserRoles { get; }
         public IRepository<RoleAccess> RoleAccesses { get; }
 
-        public void Save();
+        public Task<int> Save();
     }
 }

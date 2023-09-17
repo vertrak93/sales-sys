@@ -1,4 +1,5 @@
-﻿using Sales.Data.UnitOfWork;
+﻿using Microsoft.EntityFrameworkCore;
+using Sales.Data.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace Sales.BLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public object GetUsers()
+        public async Task<object> GetUsers()
         {
-            var users = _unitOfWork.Users.Get().ToList();
+            var users = await _unitOfWork.Users.Get().ToListAsync();
 
             return users.Select( el => new {el.Username, el.CreatedDate, el.Email, el.FisrtName, el.LastName } );
         }

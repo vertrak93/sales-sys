@@ -18,9 +18,9 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var data = _userService.GetUsers();
+            var data = await _userService.GetUsers();
 
             return Ok(data);
         }

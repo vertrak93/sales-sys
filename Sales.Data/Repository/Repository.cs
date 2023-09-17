@@ -24,36 +24,44 @@ namespace Sales.Data.Repository
             _userName = UserName;
         }
 
-        public void Add(TEntity obj)
+        public async Task<TEntity> Add(TEntity obj)
         {
             SetCreator(obj);
-            _dbSet.Add(obj);
+            var result = await _dbSet.AddAsync(obj);
+            return result.Entity;
         }
 
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var obj = _dbSet.Find(id);
-            if (obj != null)
-            {
-                ApplySoftDelete(obj);
-                SetModifier(obj);
-            }
+            var obj = await _dbSet.FindAsync(id);
+
+            if (obj == null)
+                return false;
+            
+            ApplySoftDelete(obj);
+            SetModifier(obj);
+
+            _dbSet.Entry(obj).State = EntityState.Modified;     
+            
+            return true;
         }
 
-        public IQueryable<TEntity> Get()
+        public  IQueryable<TEntity> Get()
         {
             return _dbSet.AsQueryable();
         }
 
-        public TEntity Get(int id)
+        public async Task<TEntity> Get(int id)
         {
-            return _dbSet.Find(id);
+            return await _dbSet.FindAsync(id);
         }
 
-        public void Update(TEntity obj)
+        public bool Update(TEntity obj)
         {
             SetModifier(obj);
             _dbSet.Update(obj);
+
+            return true;
         }
 
         private void SetModifier(TEntity obj)

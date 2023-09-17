@@ -9,11 +9,11 @@ namespace Sales.Data.Repository
     public interface IRepository<TEntity>
     {
 
-        IQueryable<TEntity> Get();
-        TEntity Get(int id);
-        void Add(TEntity obj);
-        void Delete(int id);
-        void Update(TEntity obj);
+        public IQueryable<TEntity> Get();
+        public Task<TEntity> Get(int id);
+        public Task<TEntity> Add(TEntity obj);
+        public Task<bool> Delete(int id);
+        public bool Update(TEntity obj);
 
     }
 }
