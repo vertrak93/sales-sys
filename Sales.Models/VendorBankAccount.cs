@@ -18,7 +18,7 @@ namespace Sales.Models
         public int VendorId { get; set; }
 
         [Required]
-        public int BankAccoutId { get; set; }
+        public int BankAccountId { get; set; }
 
         [Required, DefaultValue(true)]
         public bool Active { get; set; }

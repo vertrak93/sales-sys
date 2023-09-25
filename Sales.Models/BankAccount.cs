@@ -38,6 +38,6 @@ namespace Sales.Models
         #endregion
 
         public virtual Bank Bank { get; set; }
-        public ICollection<VendorAddress>? VendorAddresses { get; set; }
+        public ICollection<VendorBankAccount>? VendorBankAccounts { get; set; }
     }
 }

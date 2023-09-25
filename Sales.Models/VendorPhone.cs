@@ -18,7 +18,7 @@ namespace Sales.Models
         public int VendorId { get; set; }
 
         [Required]
-        public int TelephonyId { get; set; }
+        public int PhoneId { get; set; }
 
         #region Modify Control
 

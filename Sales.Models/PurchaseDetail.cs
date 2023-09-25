@@ -15,7 +15,7 @@ namespace Sales.Models
         public int PurchaseDetailId { get; set; }
 
         [Required]
-        public int VendorProductoId { get; set; }
+        public int VendorProductId { get; set; }
 
         [Required]
         public int PurchaseId { get; set; }

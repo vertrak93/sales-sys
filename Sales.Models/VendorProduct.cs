@@ -25,9 +25,6 @@ namespace Sales.Models
 
         #region Modify Control
 
-        [Required, DefaultValue(true)]
-        public bool Active { get; set; }
-
         [Required, StringLength(100)]
         public string CreatedBy { get; set; }
 

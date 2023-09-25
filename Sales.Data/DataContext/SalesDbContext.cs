@@ -18,10 +18,14 @@ namespace Sales.Data.DataContext
         public DbSet<BankAccount> BankAccount { get; set; }
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<Invoice> Invoice { get; set; }
         public DbSet<Phone> Phone { get; set; }
         public DbSet<Presentation> Presentation { get; set; }
         public DbSet<PriceType> PriceType { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<Purchase> Purchase { get; set; }
+        public DbSet<PurchaseDetail> PurchaseDetail { get; set; }
+        public DbSet<PurchaseType> PurchaseType { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<RoleAccess> RoleAccess { get; set; }
         public DbSet<SubCategory> SubCategory { get; set; }
@@ -32,6 +36,7 @@ namespace Sales.Data.DataContext
         public DbSet<VendorAddress> VendorAddress { get; set; }
         public DbSet<VendorBankAccount> VendorBankAccount { get; set; }
         public DbSet<VendorPhone> VendorPhone { get; set; } 
+        public DbSet<VendorProduct> VendorProduct { get; set; } 
 
 
         public SalesDbContext(DbContextOptions<SalesDbContext> options)
