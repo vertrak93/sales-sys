@@ -44,6 +44,7 @@ namespace Sales.Models
         public virtual Vendor Vendor { get; set;}
         public virtual Product Product { get; set;}
 
+        public ICollection<PurchaseDetail> PurchaseDetails { get; set; }
 
     }
 }

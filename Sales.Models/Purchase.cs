@@ -1,24 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Vendor
+    public class Purchase
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int PurchaseId { get; set; }
+
+        [Required]
         public int VendorId { get; set; }
 
-        [Required, MaxLength(50)]
-        public string VendorName { get; set; }
+        [Required]
+        public int PurchaseTypeId { get; set; }
 
-        [Required, MaxLength(50)]
-        public string TIN { get; set; } //Taxpayer Identification Number
+        [Required]
+        public int InvoiceId { get; set; }
+
+        [Required]
+        public DateTime PurchaseDate { get; set; }
+
+        [Required]
+        public DateTime PaymentDeadline { get; set; }
 
         [Required, DefaultValue(true)]
         public bool Active { get; set; }
@@ -37,9 +46,10 @@ namespace Sales.Models
 
         #endregion
 
-        public ICollection<VendorBankAccount>? VendorBankAccounts { get; set; }
-        public ICollection<VendorPhone>? VendorPhones { get; set; }
-        public ICollection<VendorAddress>? VendorAddresses { get; set; }
-        public ICollection<VendorProduct>? VendorProducts { get; set; }
+        public virtual Vendor Vendor { get; set; }
+        public virtual PurchaseType PurchaseType { get; set; }
+        public virtual Invoice Invoice { get; set; }
+
+        public ICollection<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

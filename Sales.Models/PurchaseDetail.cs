@@ -1,24 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Vendor
+    public class PurchaseDetail
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int VendorId { get; set; }
+        public int PurchaseDetailId { get; set; }
 
-        [Required, MaxLength(50)]
-        public string VendorName { get; set; }
+        [Required]
+        public int VendorProductoId { get; set; }
 
-        [Required, MaxLength(50)]
-        public string TIN { get; set; } //Taxpayer Identification Number
+        [Required]
+        public int PurchaseId { get; set; }
+
+        [Required]
+        public double QuantityUnit { get; set; }
+
+        [Required]
+        public double PriceUnit { get; set; }
+
+        public double QuantityContainer { get; set; }
+
+        public double PriceContainer { get; set; }
 
         [Required, DefaultValue(true)]
         public bool Active { get; set; }
@@ -37,9 +47,7 @@ namespace Sales.Models
 
         #endregion
 
-        public ICollection<VendorBankAccount>? VendorBankAccounts { get; set; }
-        public ICollection<VendorPhone>? VendorPhones { get; set; }
-        public ICollection<VendorAddress>? VendorAddresses { get; set; }
-        public ICollection<VendorProduct>? VendorProducts { get; set; }
+        public virtual Purchase Purchase { get; set;}
+        public virtual VendorProduct VendorProduct { get; set; }
     }
 }

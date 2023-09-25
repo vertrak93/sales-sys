@@ -2,23 +2,32 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
+using System.ComponentModel;
 
 namespace Sales.Models
 {
-    public class Vendor
+    public class Invoice
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int VendorId { get; set; }
+        public int InvoiceId { get; set; }
 
-        [Required, MaxLength(50)]
-        public string VendorName { get; set; }
+        [Required, MaxLength(100)]
+        public string AuthorizationNumber { get; set; }
+        [Required, MaxLength(100)]
+        public string Series { get; set; }
 
-        [Required, MaxLength(50)]
-        public string TIN { get; set; } //Taxpayer Identification Number
+        [Required, MaxLength(100)]
+        public string ElectronicTaxDocuments { get; set; } //Documentos Tributarios Electrónicos - DTE
+
+        [Required]
+        public DateTime BroadcastDate { get; set; }
+
+        [Required]
+        public DateTime CertificationDate { get; set; }
 
         [Required, DefaultValue(true)]
         public bool Active { get; set; }
@@ -37,9 +46,6 @@ namespace Sales.Models
 
         #endregion
 
-        public ICollection<VendorBankAccount>? VendorBankAccounts { get; set; }
-        public ICollection<VendorPhone>? VendorPhones { get; set; }
-        public ICollection<VendorAddress>? VendorAddresses { get; set; }
-        public ICollection<VendorProduct>? VendorProducts { get; set; }
+        public ICollection<Purchase>? Purchases { get; set;}
     }
 }
