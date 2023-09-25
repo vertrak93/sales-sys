@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Role
+    public class PriceType
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid RoleId { get; set; }
+        public int PriceTypeId { get; set; }
 
-        [Required, StringLength(50)]
-        public string RoleName { get; set; }
+        [Required, StringLength(100)]
+        public string PriceTypeName { get; set; }
 
         [Required, DefaultValue(true)]
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
 
         #region Modify Control
         [Required, StringLength(100)]
@@ -33,9 +33,5 @@ namespace Sales.Models
         public DateTime? ModifiedDate { get; set; }
 
         #endregion
-
-        public ICollection<UserRole>? UserRol { get; set; }
-
-        public ICollection<RoleAccess>? RoleAccess { get; set; }
     }
 }

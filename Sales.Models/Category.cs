@@ -9,22 +9,21 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Role
+    public class Category
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid RoleId { get; set; }
+        public int CategoryId { get; set; }
 
-        [Required, StringLength(50)]
-        public string RoleName { get; set; }
+        [Required, StringLength(100)]
+        public string CategoryName { get; set; }
 
         [Required, DefaultValue(true)]
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
 
         #region Modify Control
         [Required, StringLength(100)]
         public string CreatedBy { get; set; }
 
-        [Required]
         public DateTime CreatedDate { get; set; }
 
         [StringLength(100)]
@@ -34,8 +33,8 @@ namespace Sales.Models
 
         #endregion
 
-        public ICollection<UserRole>? UserRol { get; set; }
+        public ICollection<SubCategory>? SubCategories { get; set; }
 
-        public ICollection<RoleAccess>? RoleAccess { get; set; }
+        public ICollection<Product>? Products { get; set; }
     }
 }

@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Role
+    public class Telephony
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid RoleId { get; set; }
+        public int TelephonyId { get; set; }
 
-        [Required, StringLength(50)]
-        public string RoleName { get; set; }
+        [Required, StringLength(100)]
+        public string TelephonyName { get; set; }
 
         [Required, DefaultValue(true)]
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
 
         #region Modify Control
         [Required, StringLength(100)]
@@ -34,8 +34,6 @@ namespace Sales.Models
 
         #endregion
 
-        public ICollection<UserRole>? UserRol { get; set; }
-
-        public ICollection<RoleAccess>? RoleAccess { get; set; }
+        public ICollection<Phone>? Phones { get; set; }
     }
 }

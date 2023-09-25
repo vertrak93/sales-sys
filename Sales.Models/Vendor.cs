@@ -9,16 +9,19 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Role
+    public class Vendor
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid RoleId { get; set; }
+        public int VendorId { get; set; }
 
-        [Required, StringLength(50)]
-        public string RoleName { get; set; }
+        [Required, MaxLength(50)]
+        public string VendorName { get; set; }
+
+        [Required, MaxLength(50)]
+        public string TIN { get; set; } //Taxpayer Identification Number
 
         [Required, DefaultValue(true)]
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
 
         #region Modify Control
         [Required, StringLength(100)]
@@ -34,8 +37,10 @@ namespace Sales.Models
 
         #endregion
 
-        public ICollection<UserRole>? UserRol { get; set; }
+        public ICollection<VendorBankAccount>? VendorBankAccounts { get; set; }
+        public ICollection<VendorPhone>? VendorPhones { get; set; }
+        public ICollection<VendorAddress>? VendorAddresses { get; set; }
 
-        public ICollection<RoleAccess>? RoleAccess { get; set; }
+        public ICollection<VendorProduct>? vendorProducts { get; set; }
     }
 }

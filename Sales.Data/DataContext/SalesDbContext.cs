@@ -13,10 +13,26 @@ namespace Sales.Data.DataContext
     public class SalesDbContext : DbContext
     {
         public DbSet<Access> Access { get; set; }
+        public DbSet<Address> Address { get; set; }
+        public DbSet<Bank> Bank { get; set; }
+        public DbSet<BankAccount> BankAccount { get; set; }
+        public DbSet<Brand> Brand { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Phone> Phone { get; set; }
+        public DbSet<Presentation> Presentation { get; set; }
+        public DbSet<PriceType> PriceType { get; set; }
+        public DbSet<Product> Product { get; set; }
         public DbSet<Role> Role { get; set; }
-        public DbSet<User> User { get; set; }
         public DbSet<RoleAccess> RoleAccess { get; set; }
+        public DbSet<SubCategory> SubCategory { get; set; }
+        public DbSet<Telephony> Telephony { get; set; }
+        public DbSet<User> User { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
+        public DbSet<Vendor> Vendor { get; set; }
+        public DbSet<VendorAddress> VendorAddress { get; set; }
+        public DbSet<VendorBankAccount> VendorBankAccount { get; set; }
+        public DbSet<VendorPhone> VendorPhone { get; set; } 
+
 
         public SalesDbContext(DbContextOptions<SalesDbContext> options)
             : base(options) 
@@ -26,6 +42,9 @@ namespace Sales.Data.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Product>().HasIndex(x => x.ProductId).IsUnique();
+
             var guidRole = Guid.NewGuid();
             modelBuilder.Entity<Role>().HasData(
                 new Role() { RoleId = guidRole, RoleName = "Administrator", CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });

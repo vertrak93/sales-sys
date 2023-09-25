@@ -25,10 +25,10 @@ namespace Sales.Models
 
         #region Modify Control
         [Required, StringLength(100)]
-        public string? CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         [Required]
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         [StringLength(100)]
         public string? ModifiedBy { get; set; }

@@ -9,16 +9,19 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Role
+    public class SubCategory
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid RoleId { get; set; }
+        public int SubCategoryId { get; set; }
 
-        [Required, StringLength(50)]
-        public string RoleName { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
+
+        [Required, StringLength(100)]
+        public string NameSubCatagory { get; set; }
 
         [Required, DefaultValue(true)]
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
 
         #region Modify Control
         [Required, StringLength(100)]
@@ -34,8 +37,8 @@ namespace Sales.Models
 
         #endregion
 
-        public ICollection<UserRole>? UserRol { get; set; }
+        public virtual Category Category { get; set; }
 
-        public ICollection<RoleAccess>? RoleAccess { get; set; }
+        public ICollection<Product>? Products { get; set; }
     }
 }

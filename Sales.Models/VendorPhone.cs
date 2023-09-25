@@ -9,18 +9,22 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Role
+    public class VendorPhone
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid RoleId { get; set; }
+        public int VendorPhoneId { get; set; }
 
-        [Required, StringLength(50)]
-        public string RoleName { get; set; }
+        [Required]
+        public int VendorId { get; set; }
 
-        [Required, DefaultValue(true)]
-        public bool? Active { get; set; }
+        [Required]
+        public int TelephonyId { get; set; }
 
         #region Modify Control
+
+        [Required, DefaultValue(true)]
+        public bool Active { get; set; }
+
         [Required, StringLength(100)]
         public string CreatedBy { get; set; }
 
@@ -34,8 +38,7 @@ namespace Sales.Models
 
         #endregion
 
-        public ICollection<UserRole>? UserRol { get; set; }
-
-        public ICollection<RoleAccess>? RoleAccess { get; set; }
+        public virtual Phone Phone { get; set; }
+        public virtual Vendor Vendor { get; set; }
     }
 }
