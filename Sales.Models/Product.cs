@@ -32,7 +32,7 @@ namespace Sales.Models
         public string SKU { get; set; }
 
         [Required]
-        public decimal MinumunStock { get; set; }
+        public decimal MinimumStock { get; set; }
 
         [DefaultValue(false)]
         public bool? IsContainer { get; set; }

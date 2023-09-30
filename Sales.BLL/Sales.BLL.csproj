@@ -7,11 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Sales.Data\Sales.Data.csproj" />
+    <ProjectReference Include="..\Sales.DTOs\Sales.DTOs.csproj" />
+    <ProjectReference Include="..\Sales.Utils\Sales.Utils.csproj" />
   </ItemGroup>
 
 </Project>
