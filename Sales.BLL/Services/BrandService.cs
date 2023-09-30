@@ -23,6 +23,7 @@ namespace Sales.BLL.Services
         public async Task AddBrand(Brand brand)
         {
             await _unitOfWork.Brands.Add(brand);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<BrandDto>> GetBrands()
@@ -39,7 +40,8 @@ namespace Sales.BLL.Services
 
         public bool UpdateBrand(Brand brand)
         {
-            var obj = _unitOfWork.Brands.Update(brand); 
+            var obj = _unitOfWork.Brands.Update(brand);
+            _unitOfWork.Save();
             return obj;
         }
 
@@ -47,6 +49,7 @@ namespace Sales.BLL.Services
         {
             await ValidateDeleteBrand(brand);
             var obj = await _unitOfWork.Brands.Delete(brand.BrandId);
+            await _unitOfWork.SaveAsync();
             return obj;
         }
 

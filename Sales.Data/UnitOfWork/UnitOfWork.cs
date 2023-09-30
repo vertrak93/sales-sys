@@ -216,9 +216,14 @@ namespace Sales.Data.UnitOfWork
             _context = context;
         }
 
-        public async Task<int> Save()
+        public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();
+        }
+
+        public int Save()
+        {
+            return _context.SaveChanges();
         }
 
     }

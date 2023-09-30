@@ -34,6 +34,10 @@ namespace Sales.Utils.Constants
 
         #endregion
 
+        #region Bank
+        public const string BankUsedAccount = "No es posible eliminar el banco, esta asociada a una cuenta bancaria";
+        #endregion
+
         #region Category
 
         public const string CategoryUsed = "No es posible eliminar la categoria, esta asociada a un producto activo";

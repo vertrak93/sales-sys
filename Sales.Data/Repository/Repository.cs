@@ -26,7 +26,7 @@ namespace Sales.Data.Repository
 
         public async Task<TEntity> Add(TEntity obj)
         {
-            SetCreator(obj);
+            await SetCreator(obj);
             var result = await _dbSet.AddAsync(obj);
             return result.Entity;
         }
@@ -38,8 +38,8 @@ namespace Sales.Data.Repository
             if (obj == null)
                 return false;
             
-            ApplySoftDelete(obj);
-            SetModifier(obj);
+            await ApplySoftDelete(obj);
+            await SetModifierAsync(obj);
 
             _dbSet.Entry(obj).State = EntityState.Modified;     
             
@@ -64,6 +64,17 @@ namespace Sales.Data.Repository
             return true;
         }
 
+        private async Task SetModifierAsync(TEntity obj)
+        {
+            Type type = typeof(TEntity);
+
+            PropertyInfo mBy = type.GetProperty("ModifiedBy");
+            PropertyInfo mDt = type.GetProperty("ModifiedDate");
+
+            mBy.SetValue(obj, _userName, null);
+            mDt.SetValue(obj, DateTime.Now, null);
+        }
+
         private void SetModifier(TEntity obj)
         {
             Type type = typeof(TEntity);
@@ -75,7 +86,7 @@ namespace Sales.Data.Repository
             mDt.SetValue(obj, DateTime.Now, null);
         }
 
-        private void SetCreator(TEntity obj)
+        private async Task SetCreator(TEntity obj)
         {
             Type type = typeof(TEntity);
 
@@ -86,7 +97,7 @@ namespace Sales.Data.Repository
             cDt.SetValue(obj, DateTime.Now, null);
         }
 
-        private void ApplySoftDelete(TEntity obj)
+        private async Task ApplySoftDelete(TEntity obj)
         {
             Type type = typeof(TEntity);
 

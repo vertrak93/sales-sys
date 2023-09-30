@@ -40,6 +40,7 @@ namespace Sales.Data.UnitOfWork
         public IRepository<VendorBankAccount> VendorBankAccounts { get; }
         public IRepository<VendorProduct> VendorProducts { get; }
 
-        public Task<int> Save();
+        public Task<int> SaveAsync();
+        public int Save();
     }
 }

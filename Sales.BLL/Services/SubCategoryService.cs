@@ -23,6 +23,7 @@ namespace Sales.BLL.Services
         public async Task AddSubCategory(SubCategory subCategory)
         {
             await _unitOfWork.SubCategories.Add(subCategory);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<SubCategoryDto>> GetSubCategory()
@@ -42,6 +43,7 @@ namespace Sales.BLL.Services
         public bool UpdateSubCategory(SubCategory subCategory)
         {
             var obj = _unitOfWork.SubCategories.Update(subCategory);
+            _unitOfWork.Save();
             return obj;
         }
 
@@ -50,6 +52,7 @@ namespace Sales.BLL.Services
             await ValidateDeleteSubCategory(subCategory);
 
             var obj = await _unitOfWork.SubCategories.Delete(subCategory.SubCategoryId);
+            await _unitOfWork.SaveAsync();
             return obj;
         }
 

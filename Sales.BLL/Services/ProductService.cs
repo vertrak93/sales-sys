@@ -29,6 +29,7 @@ namespace Sales.BLL.Services
             await ValidateAddProduct(product);
 
             var obj = await _unitOfWork.Products.Add(product);
+            await _unitOfWork.SaveAsync();
 
             return new ProductDto { ProductId = obj.ProductId };
         }
@@ -54,7 +55,7 @@ namespace Sales.BLL.Services
         public bool UpdateProduct(Product product)
         {
             var obj = _unitOfWork.Products.Update(product);
-
+            _unitOfWork.Save();
             return obj;
         }
 
@@ -62,6 +63,7 @@ namespace Sales.BLL.Services
         {
             await ValidateDeleteProduct(product);
             var obj = await _unitOfWork.Products.Delete(product.ProductId);
+            await _unitOfWork.SaveAsync();
             return obj;
         }
 

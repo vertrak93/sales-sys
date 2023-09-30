@@ -23,6 +23,7 @@ namespace Sales.BLL.Services
         public async Task AddPresentation(Presentation presentation)
         {
             await _unitOfWork.Presentations.Add(presentation);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PresentationDto>> GetPresentations()
@@ -41,6 +42,7 @@ namespace Sales.BLL.Services
         public bool UpdatePresentation(Presentation presentation)
         {
             var obj = _unitOfWork.Presentations.Update(presentation);
+            _unitOfWork.Save();
             return obj;
         }
 
@@ -48,6 +50,7 @@ namespace Sales.BLL.Services
         {
             await ValidateDeletePresentation(presentation);
             var obj = await _unitOfWork.Presentations.Delete(presentation.PresentationId);
+            await _unitOfWork.SaveAsync();
             return obj;
         }
 
