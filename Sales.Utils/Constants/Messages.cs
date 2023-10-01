@@ -56,6 +56,10 @@ namespace Sales.Utils.Constants
 
         #endregion
 
+        #region Telephony
+        public const string TelephonyUsedPhone = "No es posible eliminar la telefonia, esta asociada a un teléfono";
+        #endregion
+
         #region Product
 
         public const string SKUDontAvalible = "El SKU ya esta siendo utilizado por otro producto.";

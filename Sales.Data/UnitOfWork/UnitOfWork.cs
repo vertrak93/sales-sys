@@ -38,6 +38,7 @@ namespace Sales.Data.UnitOfWork
         private IRepository<Vendor> _vendor;
         private IRepository<VendorAddress> _vendorAddress;
         private IRepository<VendorBankAccount> _vendorBankAccount;
+        private IRepository<VendorPhone> _vendorPhone;
         private IRepository<VendorProduct> _vendorProduct;
 
 
@@ -202,6 +203,13 @@ namespace Sales.Data.UnitOfWork
                 return _vendorBankAccount == null ? _vendorBankAccount = new Repository<VendorBankAccount>(_context, UserName) : _vendorBankAccount;
             }
         }
+        public IRepository<VendorPhone> VendorPhones
+        {
+            get
+            {
+                return _vendorPhone == null ? _vendorPhone = new Repository<VendorPhone>(_context, UserName) : _vendorPhone;
+            }
+        }
         public IRepository<VendorProduct> VendorProducts 
         {
             get
@@ -209,6 +217,7 @@ namespace Sales.Data.UnitOfWork
                 return _vendorProduct == null ? _vendorProduct = new Repository<VendorProduct>(_context, UserName) : _vendorProduct;
             }
         }
+
 
 
         public UnitOfWork(SalesDbContext context)

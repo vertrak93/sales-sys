@@ -36,7 +36,7 @@ namespace Sales.Data.Repository
             var obj = await _dbSet.FindAsync(id);
 
             if (obj == null)
-                return false;
+                return true;
             
             await ApplySoftDelete(obj);
             await SetModifierAsync(obj);
