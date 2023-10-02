@@ -8,6 +8,7 @@ namespace Sales.DTOs
 {
     public class VendorBankAccountDto
     {
+        public int VendorBankAccountId { get; set; }
         public int VendorId { get; set; }
         public int BankAccountId { get; set; }
         public string AccountNumber { get; set; }

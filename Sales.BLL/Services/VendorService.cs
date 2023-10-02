@@ -109,22 +109,23 @@ namespace Sales.BLL.Services
             return obj;
         }
 
-        public async Task<bool> DeleteVendor(Vendor vendor)
+        public async Task<bool> DeleteVendor(int VendorId)
         {
-            var delVendor = await _unitOfWork.Vendors.Delete(vendor.VendorId);
-            await DeleteVendorAddress(vendor);
+            var delVendor = await _unitOfWork.Vendors.Delete(VendorId);
+            await DeleteVendorAddress(VendorId);
 
             await _unitOfWork.SaveAsync();
             return delVendor;
         }
 
-        public async Task<bool> DeleteVendorAddress(Vendor vendor)
+        public async Task<bool> DeleteVendorAddress(int VendorId)
         {
-            var delAddress = await _unitOfWork.VendorAddresses.Get().Where( o => o.VendorId == vendor.VendorId).ToListAsync();
+            var delAddress = await _unitOfWork.VendorAddresses.Get().Where( o => o.VendorId == VendorId && o.Active == true).ToListAsync();
 
             foreach(var address in delAddress)
             {
-                await _unitOfWork.VendorAddresses.Delete(address.AddressId);
+                await _unitOfWork.VendorAddresses.Delete(address.VendorAddressId);
+                await _unitOfWork.Address.Delete(address.AddressId);
             }
 
             return true;

@@ -33,7 +33,7 @@ namespace Sales.BLL.Services
             var newVendorAddress = _mapper.Map<VendorAddress>(vendorAddress);
 
             var dbAdrress = await _unitOfWork.Address.Add(newAddress);
-            vendorAddress.AddressId = dbAdrress.AddressId;
+            newVendorAddress.AddressId = dbAdrress.AddressId;
             var dbVendorAddress = await _unitOfWork.VendorAddresses.Add(newVendorAddress);
 
             await _unitOfWork.SaveAsync();
@@ -53,22 +53,21 @@ namespace Sales.BLL.Services
             return true;
         }
 
-        public async Task<bool> DeleteVendorAddress(VendorAddressDto vendorAddress)
+        public async Task<bool> DeleteVendorAddress(int VendorAddressId)
         {
-            var delVendor = await _unitOfWork.VendorAddresses.Delete(vendorAddress.VendorAddressId);
-            await DeleteAddress(vendorAddress.VendorAddressId);
+            var delVendor = await _unitOfWork.VendorAddresses.Delete(VendorAddressId);
+            var delAddress = await DeleteAddress(VendorAddressId);
             await _unitOfWork.SaveAsync();
             return delVendor;
         }
 
         public async Task<bool> DeleteAddress(int VendorAddressId)
         {
-            var delAddress = await _unitOfWork.VendorAddresses.Get().Where(o => o.VendorAddressId == VendorAddressId).ToListAsync();
+            var delAddress = await _unitOfWork.VendorAddresses.Get().Where(o => o.VendorAddressId == VendorAddressId && o.Active == true).FirstOrDefaultAsync();
 
-            foreach (var address in delAddress)
-            {
-                await _unitOfWork.VendorAddresses.Delete(address.AddressId);
-            }
+            if (delAddress == null) return true;
+
+            await _unitOfWork.Address.Delete(delAddress.AddressId);
 
             return true;
         }
