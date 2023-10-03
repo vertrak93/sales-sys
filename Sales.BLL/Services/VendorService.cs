@@ -31,49 +31,12 @@ namespace Sales.BLL.Services
             return new VendorDto { VendorId = obj.VendorId };
         }
 
-        public async Task<VendorDto> GetVendorAllData(int id)
+        public async Task<VendorDto> GetVendorAllData(int idVendor)
         {
-            var vendorBankAccount = (from a in _unitOfWork.VendorBankAccounts.Get()
-                                     join b in _unitOfWork.BankAccounts.Get() on a.BankAccountId equals b.BankAccoutId
-                                     join c in _unitOfWork.Banks.Get() on b.BankId equals c.BankId
-                                     where a.Active == true && b.Active == true && c.Active == true
-                                     select new VendorBankAccountDto
-                                     {
-                                         VendorId = a.VendorId,
-                                         BankAccountId = b.BankAccoutId,
-                                         AccountNumber = b.AccountNumber,
-                                         BankId = c.BankId,
-                                         BankName = c.BankName
-                                     }).ToListAsync();
-
-            var vendorPhone = (from a in _unitOfWork.VendorPhones.Get()
-                               join b in _unitOfWork.Phones.Get() on a.PhoneId equals b.PhoneId
-                               join c in _unitOfWork.Telephonies.Get() on b.TelephonyId equals c.TelephonyId
-                               where a.Active == true && b.Active == true && c.Active == true
-                               select new VendorPhoneDto
-                               {
-                                   VendorId = a.VendorId,
-                                   VendorPhoneId = a.VendorPhoneId,
-                                   PhoneId = b.PhoneId,
-                                   PhoneNumber = b.PhoneNumber,
-                                   Comment = b.Comment,
-                                   TelephonyId = c.TelephonyId,
-                                   TelephonyName = c.TelephonyName
-                               }).ToListAsync();
-
-
-            var vendorAddress = (from a in _unitOfWork.VendorAddresses.Get()
-                                 join b in _unitOfWork.Address.Get() on a.AddressId equals b.AddressId
-                                 where a.Active == true && b.Active == true
-                                 select new VendorAddressDto
-                                 {
-                                     VendorId = a.VendorId,
-                                     VendorAddressId = a.VendorAddressId,
-                                     AddressId = b.AddressId,
-                                     AddressDescription = b.AddressDescription
-                                 }).ToListAsync();
-
-            var vendor = _unitOfWork.Vendors.Get(id);
+            var vendorBankAccount = GetVendorBankAccounts(idVendor);
+            var vendorPhone = GetVendorPhones(idVendor);
+            var vendorAddress = GetVendorAddresses(idVendor);
+            var vendor = _unitOfWork.Vendors.Get(idVendor);
 
             await Task.WhenAll(vendorBankAccount, vendorPhone, vendorAddress, vendor);
 
@@ -129,6 +92,63 @@ namespace Sales.BLL.Services
             }
 
             return true;
+        }
+
+
+
+        public async Task<List<VendorBankAccountDto>> GetVendorBankAccounts(int idVendor)
+        {
+            var vendorBankAccount = await (from a in _unitOfWork.VendorBankAccounts.Get()
+                                           join b in _unitOfWork.BankAccounts.Get() on a.BankAccountId equals b.BankAccoutId
+                                           join c in _unitOfWork.Banks.Get() on b.BankId equals c.BankId
+                                           where a.Active == true && b.Active == true && c.Active == true
+                                           && a.VendorId == idVendor
+                                           select new VendorBankAccountDto
+                                           {
+                                               VendorId = a.VendorId,
+                                               BankAccountId = b.BankAccoutId,
+                                               AccountNumber = b.AccountNumber,
+                                               BankId = c.BankId,
+                                               BankName = c.BankName
+                                           }).ToListAsync();
+
+            return vendorBankAccount;
+        }
+
+        public async Task<List<VendorPhoneDto>> GetVendorPhones(int idVendor)
+        {
+            var vendorPhone = await (from a in _unitOfWork.VendorPhones.Get()
+                                     join b in _unitOfWork.Phones.Get() on a.PhoneId equals b.PhoneId
+                                     join c in _unitOfWork.Telephonies.Get() on b.TelephonyId equals c.TelephonyId
+                                     where a.Active == true && b.Active == true && c.Active == true
+                                     && a.VendorId == idVendor
+                                     select new VendorPhoneDto
+                                     {
+                                         VendorId = a.VendorId,
+                                         VendorPhoneId = a.VendorPhoneId,
+                                         PhoneId = b.PhoneId,
+                                         PhoneNumber = b.PhoneNumber,
+                                         Comment = b.Comment,
+                                         TelephonyId = c.TelephonyId,
+                                         TelephonyName = c.TelephonyName
+                                     }).ToListAsync();
+            return vendorPhone;
+        }
+
+        public async Task<List<VendorAddressDto>> GetVendorAddresses(int idVendor)
+        {
+            var vendorAddress = await (from a in _unitOfWork.VendorAddresses.Get()
+                                       join b in _unitOfWork.Address.Get() on a.AddressId equals b.AddressId
+                                       where a.Active == true && b.Active == true
+                                       && a.VendorId == idVendor
+                                       select new VendorAddressDto
+                                       {
+                                           VendorId = a.VendorId,
+                                           VendorAddressId = a.VendorAddressId,
+                                           AddressId = b.AddressId,
+                                           AddressDescription = b.AddressDescription
+                                       }).ToListAsync();
+            return vendorAddress;
         }
 
         #endregion

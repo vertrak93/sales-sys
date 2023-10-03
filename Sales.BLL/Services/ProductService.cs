@@ -34,7 +34,7 @@ namespace Sales.BLL.Services
             return new ProductDto { ProductId = obj.ProductId };
         }
 
-        public async Task<IEnumerable<ProductDto>> GetBrands()
+        public async Task<IEnumerable<ProductDto>> GetProducts()
         {
             var obj = await _unitOfWork.Products.Get().Where(o=> o.Active == true).ToListAsync();
 
