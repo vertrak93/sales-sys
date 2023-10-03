@@ -13,6 +13,10 @@ namespace Sales.Utils
     {
        public MapperConfig()
         {
+            CreateMap<UserDto, User>().ReverseMap();
+            CreateMap<RoleDto, Role>().ReverseMap();
+
+
             CreateMap<VendorAddressDto, VendorAddress>().ReverseMap();
             CreateMap<VendorAddressDto, Address>().ReverseMap();
 
@@ -21,6 +25,8 @@ namespace Sales.Utils
 
             CreateMap<VendorBankAccountDto, BankAccount>().ReverseMap();
             CreateMap<VendorBankAccountDto, VendorBankAccount>().ReverseMap();
+
+            
         }
     }
 }

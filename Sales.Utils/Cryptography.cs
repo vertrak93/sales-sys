@@ -9,6 +9,15 @@ namespace Sales.Utils
 {
     public class Cryptography
     {
+        private static Cryptography _instance = null;
+
+        public static Cryptography Instance()
+        {
+            if(_instance == null) _instance= new Cryptography();
+            return _instance;
+        }
+
+        private Cryptography() { }
         public static string GetSHA256(string str)
         {
             using (SHA256 sha256Hash = SHA256.Create())
