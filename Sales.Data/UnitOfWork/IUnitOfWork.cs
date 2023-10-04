@@ -29,6 +29,7 @@ namespace Sales.Data.UnitOfWork
         public IRepository<Purchase> Purchases { get; }
         public IRepository<PurchaseDetail> PurchaseDetails { get; }
         public IRepository<PurchaseType> PurchaseTypes { get; }
+        public IRepository<RefreshToken> RefreshTokens { get; }
         public IRepository<Role> Roles { get; }
         public IRepository<RoleAccess> RoleAccesses { get; }
         public IRepository<SubCategory> SubCategories { get; }

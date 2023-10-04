@@ -71,8 +71,8 @@ namespace Sales.Data.Repository
             PropertyInfo mBy = type.GetProperty("ModifiedBy");
             PropertyInfo mDt = type.GetProperty("ModifiedDate");
 
-            mBy.SetValue(obj, _userName, null);
-            mDt.SetValue(obj, DateTime.Now, null);
+            mBy?.SetValue(obj, _userName, null);
+            mDt?.SetValue(obj, DateTime.Now, null);
         }
 
         private void SetModifier(TEntity obj)
@@ -82,8 +82,8 @@ namespace Sales.Data.Repository
             PropertyInfo mBy = type.GetProperty("ModifiedBy");
             PropertyInfo mDt = type.GetProperty("ModifiedDate");
 
-            mBy.SetValue(obj, _userName, null);
-            mDt.SetValue(obj, DateTime.Now, null);
+            mBy?.SetValue(obj, _userName, null);
+            mDt?.SetValue(obj, DateTime.Now, null);
         }
 
         private async Task SetCreator(TEntity obj)
@@ -93,8 +93,8 @@ namespace Sales.Data.Repository
             PropertyInfo cBy = type.GetProperty("CreatedBy");
             PropertyInfo cDt = type.GetProperty("CreatedDate");
 
-            cBy.SetValue(obj, _userName, null);
-            cDt.SetValue(obj, DateTime.Now, null);
+            cBy?.SetValue(obj, _userName, null);
+            cDt?.SetValue(obj, DateTime.Now, null);
         }
 
         private async Task ApplySoftDelete(TEntity obj)

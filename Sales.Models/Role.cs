@@ -18,7 +18,7 @@ namespace Sales.Models
         public string RoleName { get; set; }
 
         [Required, DefaultValue(true)]
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
 
         #region Modify Control
         [Required, StringLength(100)]

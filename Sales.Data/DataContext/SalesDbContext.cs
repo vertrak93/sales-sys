@@ -26,6 +26,7 @@ namespace Sales.Data.DataContext
         public DbSet<Purchase> Purchase { get; set; }
         public DbSet<PurchaseDetail> PurchaseDetail { get; set; }
         public DbSet<PurchaseType> PurchaseType { get; set; }
+        public DbSet<RefreshToken> RefreshToken { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<RoleAccess> RoleAccess { get; set; }
         public DbSet<SubCategory> SubCategory { get; set; }

@@ -29,6 +29,7 @@ namespace Sales.Data.UnitOfWork
         private IRepository<Purchase> _purchase;
         private IRepository<PurchaseDetail> _purchaseDetail;
         private IRepository<PurchaseType> _purchaseType;
+        private IRepository<RefreshToken> _refreshToken;
         private IRepository<Role> _role;
         private IRepository<RoleAccess> _roleAccess;
         private IRepository<SubCategory> _subCategory;
@@ -138,6 +139,13 @@ namespace Sales.Data.UnitOfWork
             get
             {
                 return _purchaseType == null ? _purchaseType = new Repository<PurchaseType>(_context, UserName) : _purchaseType;
+            }
+        }
+        public IRepository<RefreshToken> Roles
+        {
+            get
+            {
+                return _refreshToken == null ? _refreshToken = new Repository<RefreshToken>(_context, UserName) : _refreshToken;
             }
         }
         public IRepository<Role> Roles

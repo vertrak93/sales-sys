@@ -47,5 +47,6 @@ namespace Sales.Models
         #endregion
 
         public ICollection<UserRole>? UserRol { get; set; }
+        public ICollection<RefreshToken>? RefreshTokens { get; set; }
     }
 }
