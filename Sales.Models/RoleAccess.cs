@@ -12,13 +12,13 @@ namespace Sales.Models
     public class RoleAccess
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid RoleAccessId { get; set; }
+        public int RoleAccessId { get; set; }
 
         [Required]
-        public Guid AccessId { get; set; }
+        public int AccessId { get; set; }
 
         [Required]
-        public Guid RoleId { get; set; }
+        public int RoleId { get; set; }
 
         [Required, DefaultValue(true)]
         public bool Active { get; set; }

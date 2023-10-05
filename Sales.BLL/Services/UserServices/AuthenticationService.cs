@@ -30,16 +30,17 @@ namespace Sales.BLL.Services.UserServices
 
         public async Task<TokenDto> Authenticate(AuthenticateDto auth, string keyJwt)
         {
-
             var user = await ValidateLogin(auth);
-            var roles = await GetRolesUser(user);
+            var roles = await GetRolesUser(user.Username);
 
             var AccessToken = TokenGenerator.Instance().GenerateJWTToken(user, roles, keyJwt);
             var RefreshToken = await CreateRefreshToken(user.Username);
 
+            await _unitOfWork.SaveAsync();
+
             return new TokenDto
             {
-                AccessToken = AccessToken,
+                Jwt = AccessToken,
                 RefreshToken = RefreshToken,
             };
         }
@@ -58,7 +59,6 @@ namespace Sales.BLL.Services.UserServices
             refreshToken.Active = true;
 
             await _unitOfWork.RefreshTokens.Add(refreshToken);
-            await _unitOfWork.SaveAsync();
 
             return token;
         }
@@ -76,22 +76,63 @@ namespace Sales.BLL.Services.UserServices
             return user;
         }
 
-        public async Task<List<RoleDto>> GetRolesUser(UserDto user)
+        public async Task<List<RoleDto>> GetRolesUser(string user)
         {
             var objRoles = await (from a in _unitOfWork.UserRoles.Get()
-                           join b in _unitOfWork.Roles.Get() on new { a.RoleId, Active = true } equals new { b.RoleId, Active = (bool)b.Active }
-                           where a.UserId == user.UserId &&
-                                 a.Active == true
+                                  join b in _unitOfWork.Roles.Get() on new { a.RoleId, Active = true } equals new { b.RoleId, Active = (bool)b.Active }
+                                  join c in _unitOfWork.Users.Get() on a.UserId equals c.UserId
+                                  where c.Username == user &&
+                                        a.Active == true
+                                        && c.Active == true
+                                  select new RoleDto
+                                  {
+                                      RoleId = a.RoleId,
+                                      RoleName = b.RoleName,
 
-                           select new RoleDto
-                           {
-                               RoleId = a.RoleId,
-                               RoleName = b.RoleName,
-
-                           }).ToListAsync(); ;
+                                  }).ToListAsync(); ;
 
             return objRoles;
 
+        }
+
+        public async Task<TokenDto> RefreshToken(TokenDto tokens, string keyJwt)
+        {
+            var principal = TokenGenerator.Instance().GetClaimsPrincipalExpiredToken(tokens.Jwt, keyJwt);
+
+            var objToken = await (from a in _unitOfWork.RefreshTokens.Get()
+                                  join b in _unitOfWork.Users.Get() on a.UserId equals b.UserId
+                                  where a.Token == tokens.RefreshToken && a.Active == true && b.Active == true
+                                  select new
+                                  {
+                                      RefreshToken = a,
+                                      User = b,
+                                  }).FirstOrDefaultAsync();
+
+            if (objToken.User.Username != principal.Identity.Name)
+            {
+                throw new Exception(Messages.InvalidUser);
+            }
+
+            if (objToken.RefreshToken.Expiration < DateTime.UtcNow)
+            {
+                throw new Exception(Messages.TokenExpired);
+            }
+
+            await _unitOfWork.RefreshTokens.Delete(objToken.RefreshToken.RefreshTokenId);
+
+            var roles = await GetRolesUser(objToken.User.Username);
+            var userDto = _mapper.Map<UserDto>(objToken.User);
+
+            var Jwt = TokenGenerator.Instance().GenerateJWTToken(userDto, roles, keyJwt);
+            var RefreshToken = await CreateRefreshToken(objToken.User.Username);
+
+            await _unitOfWork.SaveAsync();
+
+            return new TokenDto
+            {
+                RefreshToken = RefreshToken,
+                Jwt = Jwt,
+            };
         }
 
         #endregion

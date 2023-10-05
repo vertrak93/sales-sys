@@ -1,6 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Sales.DTOs;
-using Sales.DTOs.UserDtos;
 using Sales.Models;
 using Sales.Utils.Constants;
 using System;

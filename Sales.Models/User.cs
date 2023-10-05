@@ -12,7 +12,7 @@ namespace Sales.Models
     public class User
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
 
         [Required, StringLength(100)]
         public string Username { get; set; }

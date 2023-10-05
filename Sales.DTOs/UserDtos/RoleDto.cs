@@ -8,7 +8,7 @@ namespace Sales.DTOs
 {
     public class RoleDto
     {
-        public Guid RoleId { get; set; }
+        public int RoleId { get; set; }
         public string RoleName { get; set; }
     }
 }

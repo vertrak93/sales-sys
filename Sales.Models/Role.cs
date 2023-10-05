@@ -12,7 +12,7 @@ namespace Sales.Models
     public class Role
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid RoleId { get; set; }
+        public int RoleId { get; set; }
 
         [Required, StringLength(50)]
         public string RoleName { get; set; }

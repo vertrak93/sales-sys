@@ -12,7 +12,7 @@ namespace Sales.Models
     public class Access
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid AccessId { get; set; }
+        public int AccessId { get; set; }
 
         [Required, StringLength(100)]
         public string AccessName { get; set; }

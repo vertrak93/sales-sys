@@ -39,29 +39,24 @@ namespace Sales.Data.DataContext
         public DbSet<VendorPhone> VendorPhone { get; set; } 
         public DbSet<VendorProduct> VendorProduct { get; set; } 
 
-
         public SalesDbContext(DbContextOptions<SalesDbContext> options)
-            : base(options) 
-        {
-            
-        }
+            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             modelBuilder.Entity<Product>().HasIndex(x => x.ProductId).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(x => x.Username).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(x => x.Email).IsUnique();
 
-            var guidRole = Guid.NewGuid();
             modelBuilder.Entity<Role>().HasData(
-                new Role() { RoleId = guidRole, RoleName = "Administrator", CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
-
-            var guidUser = Guid.NewGuid();
+                new Role() { RoleId = -1, RoleName = "Administrator", CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
+            
             modelBuilder.Entity<User>().HasData(
-                new User() { UserId = guidUser, FisrtName = "Admin", LastName = "Admin", Username = "Admin", Password = "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", Email = "admin@admin", CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
-
-            var guidUserRole = Guid.NewGuid();
+                new User() { UserId = -1, FisrtName = "Admin", LastName = "Admin", Username = "Admin", Password = "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", Email = "admin@admin", CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
+            
             modelBuilder.Entity<UserRole>().HasData(
-                new UserRole() { UserRoleId = guidUserRole, UserId = guidUser, RoleId = guidRole, CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
+                new UserRole() { UserRoleId = -1, UserId = -1, RoleId = -1, CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
         }
 
     }
