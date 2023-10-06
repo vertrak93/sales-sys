@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace Sales.BLL.Services.UserServices
 {
-    public class AuthenticationService
+    public class AuthService: Disposable
     {
         #region Declarations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public AuthenticationService(IUnitOfWork unitOfWork, IMapper mapper)
+        public AuthService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

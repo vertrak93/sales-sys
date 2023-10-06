@@ -50,6 +50,19 @@ namespace Sales.Utils
 
             string jwt = new JwtSecurityTokenHandler().WriteToken(secuityToken);
 
+            #region test
+            var a = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(15),
+                SigningCredentials = creds
+            };
+
+            var sectoken = new JwtSecurityTokenHandler().CreateToken(a);
+            var jwt2 = new JwtSecurityTokenHandler().WriteToken(sectoken);
+            #endregion
+
+
             return jwt;
         }
 
@@ -78,6 +91,13 @@ namespace Sales.Utils
                 throw new SecurityTokenException(Messages.InvalidToken);
 
             return principal;
+        }
+
+        public string GetUserFromJwt(string jwtToken, string keyJwt)
+        {
+            var principalClaims = GetClaimsPrincipalExpiredToken(jwtToken, keyJwt);
+
+            return principalClaims.Identity.Name;
         }
     }
 }

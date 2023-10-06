@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Sales.Data.UnitOfWork
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork: IDisposable
     {
 
         public string UserName { get; set; }

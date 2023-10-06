@@ -12,7 +12,8 @@ namespace Sales.Data.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private SalesDbContext _context;
-        public string UserName { get; set; }
+        private string _userName;
+        public string UserName { get { return _userName; } set { _userName = value; } }
 
 
         private IRepository<Access> _access;
@@ -141,7 +142,7 @@ namespace Sales.Data.UnitOfWork
                 return _purchaseType == null ? _purchaseType = new Repository<PurchaseType>(_context, UserName) : _purchaseType;
             }
         }
-        public IRepository<RefreshToken> Roles
+        public IRepository<RefreshToken> RefreshTokens
         {
             get
             {
@@ -243,5 +244,9 @@ namespace Sales.Data.UnitOfWork
             return _context.SaveChanges();
         }
 
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
 }
