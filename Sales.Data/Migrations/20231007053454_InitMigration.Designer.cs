@@ -12,8 +12,8 @@ using Sales.Data.DataContext;
 namespace Sales.Data.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    [Migration("20230925055639_InitDb")]
-    partial class InitDb
+    [Migration("20231007053454_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,11 @@ namespace Sales.Data.Migrations
 
             modelBuilder.Entity("Sales.Models.Access", b =>
                 {
-                    b.Property<Guid>("AccessId")
+                    b.Property<int>("AccessId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AccessId"));
 
                     b.Property<string>("AccessName")
                         .IsRequired()
@@ -446,7 +448,7 @@ namespace Sales.Data.Migrations
                     b.Property<bool?>("IsContainer")
                         .HasColumnType("boolean");
 
-                    b.Property<decimal>("MinumunStock")
+                    b.Property<decimal>("MinimumStock")
                         .HasColumnType("numeric");
 
                     b.Property<string>("ModifiedBy")
@@ -629,14 +631,43 @@ namespace Sales.Data.Migrations
                     b.ToTable("PurchaseType");
                 });
 
+            modelBuilder.Entity("Sales.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("RefreshTokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RefreshTokenId"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RefreshTokenId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken");
+                });
+
             modelBuilder.Entity("Sales.Models.Role", b =>
                 {
-                    b.Property<Guid>("RoleId")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
-                    b.Property<bool?>("Active")
-                        .IsRequired()
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RoleId"));
+
+                    b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
                     b.Property<string>("CreatedBy")
@@ -666,22 +697,24 @@ namespace Sales.Data.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("9bb63972-9ff3-4f7b-b4bf-6f2a9de9152b"),
+                            RoleId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2023, 9, 24, 23, 56, 39, 467, DateTimeKind.Local).AddTicks(7429),
+                            CreatedDate = new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5300),
                             RoleName = "Administrator"
                         });
                 });
 
             modelBuilder.Entity("Sales.Models.RoleAccess", b =>
                 {
-                    b.Property<Guid>("RoleAccessId")
+                    b.Property<int>("RoleAccessId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("AccessId")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RoleAccessId"));
+
+                    b.Property<int>("AccessId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -701,8 +734,8 @@ namespace Sales.Data.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
 
                     b.HasKey("RoleAccessId");
 
@@ -792,9 +825,11 @@ namespace Sales.Data.Migrations
 
             modelBuilder.Entity("Sales.Models.User", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -841,15 +876,21 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
                     b.ToTable("User");
 
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("47f07790-5750-478d-8cbb-20b34aedbb97"),
+                            UserId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2023, 9, 24, 23, 56, 39, 467, DateTimeKind.Local).AddTicks(7515),
+                            CreatedDate = new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5411),
                             Email = "admin@admin",
                             FisrtName = "Admin",
                             LastName = "Admin",
@@ -860,9 +901,11 @@ namespace Sales.Data.Migrations
 
             modelBuilder.Entity("Sales.Models.UserRole", b =>
                 {
-                    b.Property<Guid>("UserRoleId")
+                    b.Property<int>("UserRoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserRoleId"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -882,11 +925,11 @@ namespace Sales.Data.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("UserRoleId");
 
@@ -899,12 +942,12 @@ namespace Sales.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserRoleId = new Guid("0389de42-2dfa-46a1-90bb-03416762d722"),
+                            UserRoleId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2023, 9, 24, 23, 56, 39, 467, DateTimeKind.Local).AddTicks(7530),
-                            RoleId = new Guid("9bb63972-9ff3-4f7b-b4bf-6f2a9de9152b"),
-                            UserId = new Guid("47f07790-5750-478d-8cbb-20b34aedbb97")
+                            CreatedDate = new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5424),
+                            RoleId = -1,
+                            UserId = -1
                         });
                 });
 
@@ -1214,6 +1257,17 @@ namespace Sales.Data.Migrations
                     b.Navigation("VendorProduct");
                 });
 
+            modelBuilder.Entity("Sales.Models.RefreshToken", b =>
+                {
+                    b.HasOne("Sales.Models.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Sales.Models.RoleAccess", b =>
                 {
                     b.HasOne("Sales.Models.Access", "Access")
@@ -1420,6 +1474,8 @@ namespace Sales.Data.Migrations
 
             modelBuilder.Entity("Sales.Models.User", b =>
                 {
+                    b.Navigation("RefreshTokens");
+
                     b.Navigation("UserRol");
                 });
 

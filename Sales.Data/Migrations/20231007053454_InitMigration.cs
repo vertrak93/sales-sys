@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Sales.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,8 @@ namespace Sales.Data.Migrations
                 name: "Access",
                 columns: table => new
                 {
-                    AccessId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AccessId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     AccessName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Route = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
@@ -182,7 +183,8 @@ namespace Sales.Data.Migrations
                 name: "Role",
                 columns: table => new
                 {
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RoleName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -217,7 +219,8 @@ namespace Sales.Data.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Username = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     FisrtName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -307,9 +310,10 @@ namespace Sales.Data.Migrations
                 name: "RoleAccess",
                 columns: table => new
                 {
-                    RoleAccessId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AccessId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleAccessId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AccessId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -360,12 +364,35 @@ namespace Sales.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    RefreshTokenId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.RefreshTokenId);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRole",
                 columns: table => new
                 {
-                    UserRoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserRoleId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -503,7 +530,7 @@ namespace Sales.Data.Migrations
                     PresentationId = table.Column<int>(type: "integer", nullable: false),
                     ProductName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     SKU = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    MinumunStock = table.Column<decimal>(type: "numeric", nullable: false),
+                    MinimumStock = table.Column<decimal>(type: "numeric", nullable: false),
                     IsContainer = table.Column<bool>(type: "boolean", nullable: true),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -639,17 +666,17 @@ namespace Sales.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "RoleId", "Active", "CreatedBy", "CreatedDate", "ModifiedBy", "ModifiedDate", "RoleName" },
-                values: new object[] { new Guid("9bb63972-9ff3-4f7b-b4bf-6f2a9de9152b"), true, "Admin", new DateTime(2023, 9, 24, 23, 56, 39, 467, DateTimeKind.Local).AddTicks(7429), null, null, "Administrator" });
+                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5300), null, null, "Administrator" });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "UserId", "Active", "CreatedBy", "CreatedDate", "Email", "FisrtName", "LastName", "ModifiedBy", "ModifiedDate", "Password", "Username" },
-                values: new object[] { new Guid("47f07790-5750-478d-8cbb-20b34aedbb97"), true, "Admin", new DateTime(2023, 9, 24, 23, 56, 39, 467, DateTimeKind.Local).AddTicks(7515), "admin@admin", "Admin", "Admin", null, null, "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", "Admin" });
+                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5411), "admin@admin", "Admin", "Admin", null, null, "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", "Admin" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
                 columns: new[] { "UserRoleId", "Active", "CreatedBy", "CreatedDate", "ModifiedBy", "ModifiedDate", "RoleId", "UserId" },
-                values: new object[] { new Guid("0389de42-2dfa-46a1-90bb-03416762d722"), true, "Admin", new DateTime(2023, 9, 24, 23, 56, 39, 467, DateTimeKind.Local).AddTicks(7530), null, null, new Guid("9bb63972-9ff3-4f7b-b4bf-6f2a9de9152b"), new Guid("47f07790-5750-478d-8cbb-20b34aedbb97") });
+                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5424), null, null, -1, -1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BankAccount_BankId",
@@ -713,6 +740,11 @@ namespace Sales.Data.Migrations
                 column: "VendorProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_UserId",
+                table: "RefreshToken",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoleAccess_AccessId",
                 table: "RoleAccess",
                 column: "AccessId");
@@ -726,6 +758,18 @@ namespace Sales.Data.Migrations
                 name: "IX_SubCategory_CategoryId",
                 table: "SubCategory",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Email",
+                table: "User",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Username",
+                table: "User",
+                column: "Username",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRole_RoleId",
@@ -786,6 +830,9 @@ namespace Sales.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "PurchaseDetail");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "RoleAccess");

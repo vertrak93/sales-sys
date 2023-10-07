@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Sales.Data.DataContext;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs.UtilsDto;
+using Sales.Utils;
 using System.Runtime;
 using System.Text;
 
@@ -18,7 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 builder.Services.Configure<AppSettingsDto>(builder.Configuration.GetSection("MySettings"));
 

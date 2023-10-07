@@ -13,7 +13,9 @@ namespace Sales.Utils
     {
        public MapperConfig()
         {
-            CreateMap<UserDto, User>().ReverseMap();
+            CreateMap<UserDto, User>();
+            CreateMap<User, UserDto>();
+
             CreateMap<RoleDto, Role>().ReverseMap();
 
 

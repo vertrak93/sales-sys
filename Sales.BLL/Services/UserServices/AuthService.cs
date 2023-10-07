@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Sales.BLL.Services.UserServices
 {
-    public class AuthService: Disposable
+    public class AuthService
     {
         #region Declarations
         private readonly IUnitOfWork _unitOfWork;

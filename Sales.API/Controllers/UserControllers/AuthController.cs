@@ -29,6 +29,7 @@ namespace Sales.API.Controllers.UserControllers
             _unitOfWork = unitOfWork;
             _appSettings = appSettings;
             _mapper = mapper;
+            _authService = new AuthService(_unitOfWork, _mapper);
         }
 
         [HttpPost]
@@ -36,18 +37,15 @@ namespace Sales.API.Controllers.UserControllers
         {
             try
             {
-                using (var authService = new AuthService(_unitOfWork, _mapper))
-                {
-                    _unitOfWork.UserName = authenticate.Username;
-                    var data = await authService.Authenticate(authenticate, _appSettings.Value.KeyJwt);
+                _unitOfWork.UserName = authenticate.Username;
+                var data = await _authService.Authenticate(authenticate, _appSettings.Value.KeyJwt);
 
-                    return Ok(new ApiResponseDto
-                    {
-                        Code = 200,
-                        Message = "OK",
-                        Data= data
-                    });
-                }   
+                return Ok(new ApiResponseDto
+                {
+                    Code = 200,
+                    Message = "OK",
+                    Data= data
+                });  
 
             }catch (Exception ex)
             {
@@ -62,18 +60,16 @@ namespace Sales.API.Controllers.UserControllers
         {
             try
             {
-                using (var authService = new AuthService(_unitOfWork, _mapper))
-                {
-                    _unitOfWork.UserName = TokenGenerator.Instance().GetUserFromJwt(tokens.Jwt, _appSettings.Value.KeyJwt);
-                    var data = await authService.RefreshToken(tokens, _appSettings.Value.KeyJwt);
+                _unitOfWork.UserName = TokenGenerator.Instance().GetUserFromJwt(tokens.Jwt, _appSettings.Value.KeyJwt);
+                var data = await _authService.RefreshToken(tokens, _appSettings.Value.KeyJwt);
 
-                    return Ok(new ApiResponseDto
-                    {
-                        Code = 200,
-                        Message = "OK",
-                        Data = data,
-                    });
-                }
+                return Ok(new ApiResponseDto
+                {
+                    Code = 200,
+                    Message = "OK",
+                    Data = data,
+                });
+                
             }
             catch (Exception ex)
             {

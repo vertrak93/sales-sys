@@ -37,8 +37,8 @@ namespace Sales.Models
 
         #endregion
 
-        public virtual Access? Access { get; set; }
+        public virtual Access Access { get; set; }
 
-        public virtual Role? Role { get; set; }
+        public virtual Role Role { get; set; }
     }
 }
