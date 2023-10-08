@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Sales.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -73,7 +73,7 @@ namespace Sales.Data.Migrations
                 {
                     BrandId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BrandName = table.Column<int>(type: "integer", maxLength: 100, nullable: false),
+                    BrandName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -666,17 +666,17 @@ namespace Sales.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "RoleId", "Active", "CreatedBy", "CreatedDate", "ModifiedBy", "ModifiedDate", "RoleName" },
-                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5300), null, null, "Administrator" });
+                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 8, 2, 49, 31, 320, DateTimeKind.Local).AddTicks(4389), null, null, "Administrator" });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "UserId", "Active", "CreatedBy", "CreatedDate", "Email", "FisrtName", "LastName", "ModifiedBy", "ModifiedDate", "Password", "Username" },
-                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5411), "admin@admin", "Admin", "Admin", null, null, "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", "Admin" });
+                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 8, 2, 49, 31, 320, DateTimeKind.Local).AddTicks(4504), "admin@admin", "Admin", "Admin", null, null, "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", "Admin" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
                 columns: new[] { "UserRoleId", "Active", "CreatedBy", "CreatedDate", "ModifiedBy", "ModifiedDate", "RoleId", "UserId" },
-                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 6, 23, 34, 54, 224, DateTimeKind.Local).AddTicks(5424), null, null, -1, -1 });
+                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 8, 2, 49, 31, 320, DateTimeKind.Local).AddTicks(4517), null, null, -1, -1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BankAccount_BankId",

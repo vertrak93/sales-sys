@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sales.BLL.Services.UserServices
+namespace Sales.BLL.Services
 {
     public class AuthService
     {
@@ -28,13 +28,13 @@ namespace Sales.BLL.Services.UserServices
 
         #region Metodos
 
-        public async Task<TokenDto> Authenticate(AuthenticateDto auth, string keyJwt)
+        public async Task<TokenDto> Authenticate(AuthenticateDto auth, string keyJwt, double expirationTime, double expirationTimeRT)
         {
             var user = await ValidateLogin(auth);
             var roles = await GetRolesUser(user.Username);
 
-            var AccessToken = TokenGenerator.Instance().GenerateJWTToken(user, roles, keyJwt);
-            var RefreshToken = await CreateRefreshToken(user.Username);
+            var AccessToken = TokenGenerator.Instance().GenerateJWTToken(user, roles, keyJwt, expirationTime);
+            var RefreshToken = await CreateRefreshToken(user.Username, expirationTimeRT);
 
             await _unitOfWork.SaveAsync();
 
@@ -42,10 +42,12 @@ namespace Sales.BLL.Services.UserServices
             {
                 Jwt = AccessToken,
                 RefreshToken = RefreshToken,
+                User = user,
+                Role = roles
             };
         }
 
-        public async Task<string> CreateRefreshToken(string userName)
+        public async Task<string> CreateRefreshToken(string userName, double expirationTime)
         {
             var user = await _unitOfWork.Users.Get().Where(obj => obj.Username == userName).FirstOrDefaultAsync();
             DateTime now = DateTime.UtcNow;
@@ -55,7 +57,7 @@ namespace Sales.BLL.Services.UserServices
 
             refreshToken.UserId = user.UserId;
             refreshToken.Token = token;
-            refreshToken.Expiration = now.AddHours(5);
+            refreshToken.Expiration = now.AddHours(expirationTime);
             refreshToken.Active = true;
 
             await _unitOfWork.RefreshTokens.Add(refreshToken);
@@ -65,7 +67,7 @@ namespace Sales.BLL.Services.UserServices
 
         public async Task<UserDto> ValidateLogin(AuthenticateDto auth)
         {
-            var objUser = await _unitOfWork.Users.Get().Where(el => el.Username == auth.Username).FirstOrDefaultAsync();
+            var objUser = await _unitOfWork.Users.Get().Where(el => el.Username.ToUpper() == auth.Username.Trim().ToUpper()).FirstOrDefaultAsync();
 
             if (objUser == null) { throw new Exception(Messages.UserDontExist); }
 
@@ -81,7 +83,7 @@ namespace Sales.BLL.Services.UserServices
             var objRoles = await (from a in _unitOfWork.UserRoles.Get()
                                   join b in _unitOfWork.Roles.Get() on new { a.RoleId, Active = true } equals new { b.RoleId, Active = (bool)b.Active }
                                   join c in _unitOfWork.Users.Get() on a.UserId equals c.UserId
-                                  where c.Username == user &&
+                                  where c.Username.ToUpper() == user.Trim().ToUpper() &&
                                         a.Active == true
                                         && c.Active == true
                                   select new RoleDto
@@ -95,7 +97,7 @@ namespace Sales.BLL.Services.UserServices
 
         }
 
-        public async Task<TokenDto> RefreshToken(TokenDto tokens, string keyJwt)
+        public async Task<TokenDto> RefreshToken(TokenDto tokens, string keyJwt, double expirationTime, double expirationTimeRT)
         {
             var principal = TokenGenerator.Instance().GetClaimsPrincipalExpiredToken(tokens.Jwt, keyJwt);
 
@@ -123,8 +125,8 @@ namespace Sales.BLL.Services.UserServices
             var roles = await GetRolesUser(objToken.User.Username);
             var userDto = _mapper.Map<UserDto>(objToken.User);
 
-            var Jwt = TokenGenerator.Instance().GenerateJWTToken(userDto, roles, keyJwt);
-            var RefreshToken = await CreateRefreshToken(objToken.User.Username);
+            var Jwt = TokenGenerator.Instance().GenerateJWTToken(userDto, roles, keyJwt, expirationTime);
+            var RefreshToken = await CreateRefreshToken(objToken.User.Username, expirationTimeRT);
 
             await _unitOfWork.SaveAsync();
 

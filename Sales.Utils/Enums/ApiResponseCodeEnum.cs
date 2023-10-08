@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sales.DTOs
+namespace Sales.Utils.Enums
 {
-    public class BrandDto
+    public enum ApiResponseCodeEnum
     {
-        public int BrandId { get; set; }
-
-        public string BrandName { get; set; }
+        OK = 0, 
+        ERROR = 2
     }
 }

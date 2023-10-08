@@ -8,6 +8,7 @@ using Sales.DTOs.UtilsDto;
 using Sales.Utils;
 using System.Runtime;
 using System.Text;
+using Sales.BLL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,19 +29,25 @@ builder.Services.AddDbContext<SalesDbContext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
+        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["MySettings:KeyJwt"]));
+        var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature);
+
+        opt.RequireHttpsMetadata = false;
+
         opt.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["MySettings:KeyJwt"])),
+            IssuerSigningKey = signingKey,
             ValidateLifetime = true,
             ValidateIssuer = false,
-            ValidateAudience = false
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero,
         };
     });
+
+builder.Services.AddScopedServices();
 
 var app = builder.Build();
 
@@ -53,6 +60,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -59,7 +59,8 @@ namespace Sales.Data.Repository
         public bool Update(TEntity obj)
         {
             SetModifier(obj);
-            _dbSet.Update(obj);
+            _dbSet.Attach(obj);
+            _context.Entry(obj).State = EntityState.Modified;
 
             return true;
         }
@@ -92,9 +93,11 @@ namespace Sales.Data.Repository
 
             PropertyInfo cBy = type.GetProperty("CreatedBy");
             PropertyInfo cDt = type.GetProperty("CreatedDate");
+            PropertyInfo cAc = type.GetProperty("Active");
 
             cBy?.SetValue(obj, _userName, null);
             cDt?.SetValue(obj, DateTime.Now, null);
+            cAc?.SetValue(obj, true, null);
         }
 
         private async Task ApplySoftDelete(TEntity obj)

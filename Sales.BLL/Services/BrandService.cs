@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
@@ -14,19 +15,22 @@ namespace Sales.BLL.Services
     public class BrandService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public BrandService(IUnitOfWork unitOfWork)
+        public BrandService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task AddBrand(Brand brand)
+        public async Task Add(BrandDto brand)
         {
-            await _unitOfWork.Brands.Add(brand);
+            var objBrand = _mapper.Map<Brand>(brand);
+            await _unitOfWork.Brands.Add(objBrand);
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<BrandDto>> GetBrands()
+        public async Task<IEnumerable<BrandDto>> Get()
         {
             var obj = await _unitOfWork.Brands.Get().Where(o => o.Active == true).ToListAsync();
 
@@ -38,24 +42,32 @@ namespace Sales.BLL.Services
             });
         }
 
-        public bool UpdateBrand(Brand brand)
+        public async Task<Brand> Get(int id)
         {
-            var obj = _unitOfWork.Brands.Update(brand);
-            _unitOfWork.Save();
+            var obj = await _unitOfWork.Brands.Get(id);
             return obj;
         }
 
-        public async Task<bool> DeleteBrand(Brand brand) 
+        public async Task<bool> Update(BrandDto brand)
         {
-            await ValidateDeleteBrand(brand);
-            var obj = await _unitOfWork.Brands.Delete(brand.BrandId);
+            var dbObj = await _unitOfWork.Brands.Get(brand.BrandId);
+            var objBrand = _mapper.Map(brand, dbObj);
+            var obj = _unitOfWork.Brands.Update(objBrand);
             await _unitOfWork.SaveAsync();
             return obj;
         }
 
-        public async Task ValidateDeleteBrand(Brand brand)
+        public async Task<bool> Delete(int BrandId) 
         {
-            var obj = await _unitOfWork.Products.Get().Where(o => o.BrandId == brand.BrandId && o.Active == true).ToListAsync();
+            await ValidateDeleteBrand(BrandId);
+            var obj = await _unitOfWork.Brands.Delete(BrandId);
+            await _unitOfWork.SaveAsync();
+            return obj;
+        }
+
+        public async Task ValidateDeleteBrand(int BrandId)
+        {
+            var obj = await _unitOfWork.Products.Get().Where(o => o.BrandId == BrandId && o.Active == true).ToListAsync();
 
             if(obj.Any())
             {

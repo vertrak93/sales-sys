@@ -6,8 +6,8 @@ using Sales.Data.UnitOfWork;
 
 namespace Sales.API.Controllers.UserControllers
 {
-    [Authorize(Roles = "admin")]
-    [Route("api/[controller]")]
+    [Authorize(Roles = "Administrator")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {

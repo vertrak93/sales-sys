@@ -27,39 +27,32 @@ namespace Sales.Utils
 
         private TokenGenerator() { }
 
-        public string GenerateJWTToken(UserDto user, List<RoleDto> roles, string keyJwt)
+        public string GenerateJWTToken(UserDto user, List<RoleDto> roles, string keyJwt, double expirationTime)
         {
-            var claims = new List<Claim>()
+            var claims = new ClaimsIdentity(new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Email, user.Email)
-            };
+            });
 
             foreach (var role in roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role.RoleName));
+                claims.AddClaim(new Claim(ClaimTypes.Role, role.RoleName));
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyJwt));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            var secuityToken = new JwtSecurityToken(
-                                claims: claims,
-                                expires: DateTime.Now.AddMinutes(60),
-                                signingCredentials: creds);
-
-            string jwt = new JwtSecurityTokenHandler().WriteToken(secuityToken);
-
             #region test
-            var a = new SecurityTokenDescriptor
+            var secuityTokenDesc = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Subject = claims,
+                Expires = DateTime.UtcNow.AddMinutes(expirationTime),
                 SigningCredentials = creds
             };
 
-            var sectoken = new JwtSecurityTokenHandler().CreateToken(a);
-            var jwt2 = new JwtSecurityTokenHandler().WriteToken(sectoken);
+            var token = new JwtSecurityTokenHandler().CreateToken(secuityTokenDesc);
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             #endregion
 
 

@@ -15,7 +15,7 @@ namespace Sales.Models
         public int BrandId { get; set; }
 
         [Required, StringLength(100)]
-        public int BrandName { get; set; }
+        public string BrandName { get; set; }
 
         [Required, DefaultValue(true)]
         public bool Active { get; set; } 

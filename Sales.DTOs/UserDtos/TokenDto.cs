@@ -10,5 +10,7 @@ namespace Sales.DTOs
     {
         public string Jwt { get; set; }
         public string RefreshToken { get; set; }
+        public UserDto User { get; set; }
+        public List<RoleDto> Role { get; set; }
     }
 }

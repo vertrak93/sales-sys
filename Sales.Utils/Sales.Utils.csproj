@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Sales.Models\Sales.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
-
 </Project>

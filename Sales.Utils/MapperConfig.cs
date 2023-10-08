@@ -13,11 +13,12 @@ namespace Sales.Utils
     {
        public MapperConfig()
         {
-            CreateMap<UserDto, User>();
-            CreateMap<User, UserDto>();
-
+            CreateMap<UserDto, User>().ReverseMap();
             CreateMap<RoleDto, Role>().ReverseMap();
 
+
+
+            CreateMap<BrandDto, Brand>().ReverseMap();
 
             CreateMap<VendorAddressDto, VendorAddress>().ReverseMap();
             CreateMap<VendorAddressDto, Address>().ReverseMap();
