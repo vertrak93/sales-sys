@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
@@ -14,21 +15,24 @@ namespace Sales.BLL.Services
     public class CategoryService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CategoryService(IUnitOfWork unitOfWork)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task AddCategory(Category category)
+        public async Task Add(CategoryDto category)
         {
-            await _unitOfWork.Categories.Add(category);
+            var objCategory = _mapper.Map<Category>(category);
+            await _unitOfWork.Categories.Add(objCategory);
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<CategoryDto>> GetCategories()
+        public async Task<IEnumerable<CategoryDto>> Get()
         {
-            var obj = await _unitOfWork.Categories.Get().ToListAsync();
+            var obj = await _unitOfWork.Categories.Get().Where(o => o.Active == true).ToListAsync();
 
             return obj.Where(o => o.Active == true).Select(o => {
                 return new CategoryDto
@@ -39,24 +43,26 @@ namespace Sales.BLL.Services
             });
         }
 
-        public bool UpdateCategory(Category category)
+        public async Task<bool> Update(CategoryDto category)
         {
-            var obj = _unitOfWork.Categories.Update(category);
-            _unitOfWork.Save();
-            return obj;
-        }
-
-        public async Task<bool> DeleteCategory(Category category)
-        {
-            await ValidateDeleteCategory(category);
-            var obj = await _unitOfWork.Categories.Delete(category.CategoryId);
+            var dbObj = await _unitOfWork.Categories.Get(category.CategoryId);
+            var objCategory = _mapper.Map(category, dbObj);
+            var obj = _unitOfWork.Categories.Update(objCategory);
             await _unitOfWork.SaveAsync();
             return obj;
         }
 
-        public async Task ValidateDeleteCategory(Category category)
+        public async Task<bool> Delete(int CategoryId)
         {
-            var obj = await _unitOfWork.Products.Get().Where(o => o.CategoryId == category.CategoryId && o.Active == true).ToListAsync();
+            await ValidateDeleteCategory(CategoryId);
+            var obj = await _unitOfWork.Categories.Delete(CategoryId);
+            await _unitOfWork.SaveAsync();
+            return obj;
+        }
+
+        public async Task ValidateDeleteCategory(int CategoryId)
+        {
+            var obj = await _unitOfWork.Products.Get().Where(o => o.CategoryId == CategoryId && o.Active == true).ToListAsync();
 
             if (obj.Any())
             {

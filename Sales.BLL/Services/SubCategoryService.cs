@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
@@ -14,19 +15,21 @@ namespace Sales.BLL.Services
     public class SubCategoryService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public SubCategoryService(IUnitOfWork unitOfWork)
+        public SubCategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task AddSubCategory(SubCategory subCategory)
+        public async Task Add(SubCategoryDto subCategory)
         {
             await _unitOfWork.SubCategories.Add(subCategory);
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<SubCategoryDto>> GetSubCategory()
+        public async Task<IEnumerable<SubCategoryDto>> Get()
         {
             var obj = await _unitOfWork.SubCategories.Get().ToListAsync();
 
@@ -40,25 +43,27 @@ namespace Sales.BLL.Services
             });
         }
 
-        public bool UpdateSubCategory(SubCategory subCategory)
+        public async Task<bool> Update(SubCategoryDto subCategory)
         {
-            var obj = _unitOfWork.SubCategories.Update(subCategory);
-            _unitOfWork.Save();
-            return obj;
-        }
-
-        public async Task<bool> DeleteSubCategory(SubCategory subCategory)
-        {
-            await ValidateDeleteSubCategory(subCategory);
-
-            var obj = await _unitOfWork.SubCategories.Delete(subCategory.SubCategoryId);
+            var dbObj = await _unitOfWork.SubCategories.Get(subCategory.SubCategoryId);
+            var objSubCategory = _mapper.Map(subCategory, dbObj);
+            var obj = _unitOfWork.SubCategories.Update(objSubCategory);
             await _unitOfWork.SaveAsync();
             return obj;
         }
 
-        private async Task ValidateDeleteSubCategory(SubCategory subCategory)
+        public async Task<bool> Delete(int SubCategoryId)
         {
-            var obj = await _unitOfWork.Products.Get().Where(o => o.SubCategoryId == subCategory.SubCategoryId && o.Active == true).ToListAsync();
+            await ValidateDeleteSubCategory(SubCategoryId);
+
+            var obj = await _unitOfWork.SubCategories.Delete(SubCategoryId);
+            await _unitOfWork.SaveAsync();
+            return obj;
+        }
+
+        private async Task ValidateDeleteSubCategory(int SubCategoryId)
+        {
+            var obj = await _unitOfWork.Products.Get().Where(o => o.SubCategoryId == SubCategoryId && o.Active == true).ToListAsync();
 
             if(obj.Any())
             {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
@@ -14,21 +15,23 @@ namespace Sales.BLL.Services
     public class PresentationService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public PresentationService(IUnitOfWork unitOfWork)
+        public PresentationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddPresentation(Presentation presentation)
+        public async Task Add(PresentationDto presentation)
         {
-            await _unitOfWork.Presentations.Add(presentation);
+            var objPresentation = _mapper.Map<Presentation>(presentation);
+            await _unitOfWork.Presentations.Add(objPresentation);
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<PresentationDto>> GetPresentations()
+        public async Task<IEnumerable<PresentationDto>> Get()
         {
-            var obj = await _unitOfWork.Presentations.Get().ToListAsync();
+            var obj = await _unitOfWork.Presentations.Get().Where(o => o.Active == true).ToListAsync();
 
             return obj.Where(o => o.Active == true).Select(o => {
                 return new PresentationDto
@@ -39,24 +42,26 @@ namespace Sales.BLL.Services
             });
         }
 
-        public bool UpdatePresentation(Presentation presentation)
+        public async Task<bool> Update(PresentationDto presentation)
         {
-            var obj = _unitOfWork.Presentations.Update(presentation);
-            _unitOfWork.Save();
-            return obj;
-        }
-
-        public async Task<bool> DeletePresentation(Presentation presentation)
-        {
-            await ValidateDeletePresentation(presentation);
-            var obj = await _unitOfWork.Presentations.Delete(presentation.PresentationId);
+            var dbObj = await _unitOfWork.Presentations.Get(presentation.PresentationId);
+            var objPresentation = _mapper.Map(presentation, dbObj);
+            var obj = _unitOfWork.Presentations.Update(objPresentation);
             await _unitOfWork.SaveAsync();
             return obj;
         }
 
-        public async Task ValidateDeletePresentation(Presentation presentation)
+        public async Task<bool> Delete(int PresentationId)
         {
-            var obj = await _unitOfWork.Products.Get().Where(o => o.PresentationId == presentation.PresentationId && o.Active == true).ToListAsync();
+            await ValidateDeletePresentation(PresentationId);
+            var obj = await _unitOfWork.Presentations.Delete(PresentationId);
+            await _unitOfWork.SaveAsync();
+            return obj;
+        }
+
+        public async Task ValidateDeletePresentation(int PresentationId)
+        {
+            var obj = await _unitOfWork.Products.Get().Where(o => o.PresentationId == PresentationId && o.Active == true).ToListAsync();
 
             if (obj.Any())
             {

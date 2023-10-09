@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Sales.BLL.Services;
@@ -11,21 +12,21 @@ using Sales.Utils.Constants;
 namespace Sales.API.Controllers.ProductControllers
 {
     [Authorize(Roles = "Administrator")]
-    [Route("api/brand")]
+    [Route("api/presentation")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class PresentationController : ControllerBase
     {
-        private BrandService _brandService;
+        private PresentationService _presentationService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOptions<AppSettingsDto> _appSettings;
         private readonly IMapper _mapper;
 
-        public BrandController(IOptions<AppSettingsDto> appSettings, IUnitOfWork unitOfWork, IMapper mapper, BrandService brandService)
+        public PresentationController(IOptions<AppSettingsDto> appSettings, IUnitOfWork unitOfWork, IMapper mapper, PresentationService presentationService)
         {
             _unitOfWork = unitOfWork;
             _appSettings = appSettings;
             _mapper = mapper;
-            _brandService = brandService;
+            _presentationService = presentationService;
         }
 
         [HttpGet]
@@ -33,7 +34,7 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                var brands = await _brandService.Get();
+                var brands = await _presentationService.Get();
                 return Ok(new ApiResponseDto { Data = brands, Message = Messages.GetedData });
             }
             catch (Exception ex)
@@ -44,11 +45,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(BrandDto brand)
+        public async Task<IActionResult> Post(PresentationDto presentation)
         {
             try
             {
-                await _brandService.Add(brand);
+                await _presentationService.Add(presentation);
 
                 return Ok(new ApiResponseDto { Message = Messages.PostedData });
             }
@@ -59,11 +60,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(BrandDto brand)
+        public async Task<IActionResult> Patch(PresentationDto presentation)
         {
             try
             {
-                await _brandService.Update(brand);
+                await _presentationService.Update(presentation);
                 return Ok(new ApiResponseDto { Message = Messages.PatchedData });
             }
             catch (Exception ex)
@@ -77,7 +78,7 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                await _brandService.Delete(id);
+                await _presentationService.Delete(id);
                 return Ok(new ApiResponseDto { Message = Messages.DeletedData });
             }
             catch (Exception ex)

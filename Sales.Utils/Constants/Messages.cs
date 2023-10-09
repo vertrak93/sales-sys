@@ -8,6 +8,14 @@ namespace Sales.Utils.Constants
 {
     public class Messages
     {
+        #region ApiResponse
+        public static readonly string GetedData = "Datos obtenidos";
+        public static readonly string PostedData = "Datos posteados";
+        public static readonly string PatchedData = "Datos acualizados";
+        public static readonly string DeletedData = "Datos eliminados";
+        public static readonly string AccionSucceed = "Acción exitosa";
+        #endregion
+
         #region ValidationPostUsers
 
         public static readonly string ExistingUserName = "El nombre de usuario ya existe.";

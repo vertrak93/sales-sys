@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
@@ -15,19 +16,22 @@ namespace Sales.BLL.Services
     {
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public BankService(IUnitOfWork unitOfWork)
+        public BankService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task AddBank(Bank bank)
+        public async Task Add(BankDto bank)
         {
-            await _unitOfWork.Banks.Add(bank);
+            var objBank = _mapper.Map<Bank>(bank);
+            await _unitOfWork.Banks.Add(objBank);
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<BankDto>> GetBanks()
+        public async Task<IEnumerable<BankDto>> Get()
         {
             var obj = await _unitOfWork.Banks.Get().Where(o => o.Active == true).ToListAsync();
 
@@ -40,24 +44,26 @@ namespace Sales.BLL.Services
             });
         }
 
-        public bool UpdateBank(Bank bank)
+        public async Task<bool> Update(BankDto bank)
         {
-            var obj = _unitOfWork.Banks.Update(bank);
+            var dbObj = await _unitOfWork.Banks.Get(bank.BankId);
+            var objBank = _mapper.Map(bank, dbObj);
+            var obj = _unitOfWork.Banks.Update(objBank);
             _unitOfWork.Save();
             return obj;
         }
 
-        public async Task<bool> DeleteBank(Bank bank)
+        public async Task<bool> Delete(int BankId)
         {
-            await ValidateDeleteBank(bank);
-            var obj = await _unitOfWork.Banks.Delete(bank.BankId);
+            await ValidateDeleteBank(BankId);
+            var obj = await _unitOfWork.Banks.Delete(BankId);
             await _unitOfWork.SaveAsync();
             return obj;
         }
 
-        public async Task ValidateDeleteBank(Bank bank)
+        public async Task ValidateDeleteBank(int BankId)
         {
-            var obj = await _unitOfWork.BankAccounts.Get().Where(o => o.BankId == bank.BankId && o.Active == true).ToListAsync();
+            var obj = await _unitOfWork.BankAccounts.Get().Where(o => o.BankId == BankId && o.Active == true).ToListAsync();
 
             if (obj.Any())
             {

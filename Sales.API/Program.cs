@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Sales.Data.DataContext;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs.UtilsDto;
 using Sales.Utils;
-using System.Runtime;
 using System.Text;
 using Sales.BLL;
+using Sales.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +61,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<UserInitializationMiddleware>(); //initializer username
 
 app.MapControllers();
 
