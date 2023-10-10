@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
@@ -14,19 +15,22 @@ namespace Sales.BLL.Services
     public class TelephonyService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public TelephonyService(IUnitOfWork unitOfWork)
+        public TelephonyService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task AddTelephony(Telephony telephony)
+        public async Task Add(TelephonyDto telephony)
         {
-            await _unitOfWork.Telephonies.Add(telephony);
+            var objTelephony = _mapper.Map<Telephony>(telephony);
+            await _unitOfWork.Telephonies.Add(objTelephony);
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<TelephonyDto>> GetBanks()
+        public async Task<IEnumerable<TelephonyDto>> Get()
         {
             var obj = await _unitOfWork.Telephonies.Get().Where(o => o.Active == true).ToListAsync();
 
@@ -39,29 +43,28 @@ namespace Sales.BLL.Services
             });
         }
 
-        public bool UpdateTelephony(Telephony telephony)
+        public async Task<bool> Update(TelephonyDto telephony)
         {
-            var obj = _unitOfWork.Telephonies.Update(telephony);
-            _unitOfWork.Save();
-            return obj;
-        }
-
-        public async Task<bool> DeleteTelephony(Telephony telephony)
-        {
-            await ValidateDeleteTelephony(telephony);
-            var obj = await _unitOfWork.Banks.Delete(telephony.TelephonyId);
+            var dbObj = await _unitOfWork.Telephonies.Get(telephony.TelephonyId);
+            var objTelephony = _mapper.Map(telephony, dbObj);
+            var obj = _unitOfWork.Telephonies.Update(objTelephony);
             await _unitOfWork.SaveAsync();
             return obj;
         }
 
-        public async Task ValidateDeleteTelephony(Telephony telephony)
+        public async Task<bool> Delete(int TelephonyId)
         {
-            var obj = await _unitOfWork.Phones.Get().Where(o => o.TelephonyId == telephony.TelephonyId && o.Active == true).ToListAsync();
+            await ValidateDeleteTelephony(TelephonyId);
+            var obj = await _unitOfWork.Banks.Delete(TelephonyId);
+            await _unitOfWork.SaveAsync();
+            return obj;
+        }
 
-            if (obj.Any())
-            {
-                throw new Exception(Messages.TelephonyUsedPhone);
-            }
+        public async Task ValidateDeleteTelephony(int TelephonyId)
+        {
+            var obj = await _unitOfWork.Phones.Get().Where(o => o.TelephonyId == TelephonyId && o.Active == true).ToListAsync();
+
+            if (obj.Any()){ throw new Exception(Messages.TelephonyUsedPhone); }
         }
     }
 }

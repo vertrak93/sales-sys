@@ -25,7 +25,8 @@ namespace Sales.BLL.Services
 
         public async Task Add(SubCategoryDto subCategory)
         {
-            await _unitOfWork.SubCategories.Add(subCategory);
+            var objSubCategory = _mapper.Map<SubCategory>(subCategory);
+            await _unitOfWork.SubCategories.Add(objSubCategory);
             await _unitOfWork.SaveAsync();
         }
 

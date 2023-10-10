@@ -20,6 +20,7 @@ namespace Sales.BLL.Services
         public PresentationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task Add(PresentationDto presentation)

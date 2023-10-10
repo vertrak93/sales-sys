@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
@@ -16,25 +17,30 @@ namespace Sales.BLL.Services
     {
         #region Declarations
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public ProductService(IUnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         #endregion
 
         #region CRUD Methods
-        public async Task<ProductDto> AddProduct(Product product) 
+        public async Task<ProductDto> Add(ProductDto product) 
         {
-            await ValidateAddProduct(product);
 
-            var obj = await _unitOfWork.Products.Add(product);
+            var objProduct = _mapper.Map<Product>(product);
+
+            await ValidateAddProduct(objProduct);
+
+            var obj = await _unitOfWork.Products.Add(objProduct);
             await _unitOfWork.SaveAsync();
 
             return new ProductDto { ProductId = obj.ProductId };
         }
 
-        public async Task<IEnumerable<ProductDto>> GetProducts()
+        public async Task<IEnumerable<ProductDto>> Get()
         {
             var obj = await _unitOfWork.Products.Get().Where(o=> o.Active == true).ToListAsync();
 
@@ -52,17 +58,19 @@ namespace Sales.BLL.Services
             });
         }
 
-        public bool UpdateProduct(Product product)
+        public async Task<bool> Update(ProductDto product)
         {
-            var obj = _unitOfWork.Products.Update(product);
-            _unitOfWork.Save();
+            var dbObj = await _unitOfWork.Products.Get(product.ProductId);
+            var objProduct = _mapper.Map(product, dbObj);
+            var obj = _unitOfWork.Products.Update(objProduct);
+            await _unitOfWork.SaveAsync();
             return obj;
         }
 
-        public async Task<bool> DeleteProduct(Product product)
+        public async Task<bool> Delete(int ProductId)
         {
-            await ValidateDeleteProduct(product);
-            var obj = await _unitOfWork.Products.Delete(product.ProductId);
+            await ValidateDeleteProduct(ProductId);
+            var obj = await _unitOfWork.Products.Delete(ProductId);
             await _unitOfWork.SaveAsync();
             return obj;
         }
@@ -80,9 +88,9 @@ namespace Sales.BLL.Services
             if (existSKU.Any()) { throw new Exception(Messages.SKUDontAvalible); }
         }
 
-        public async Task ValidateDeleteProduct(Product product)
+        public async Task ValidateDeleteProduct(int ProductId)
         {
-            var existVendorProduct = await _unitOfWork.VendorProducts.Get().Where( o=> o.ProductId== product.ProductId ).ToListAsync();
+            var existVendorProduct = await _unitOfWork.VendorProducts.Get().Where( o=> o.ProductId == ProductId && o.Active ).ToListAsync();
             if (existVendorProduct.Any()) { throw new Exception(Messages.VendorProductUsed); }
         }
         #endregion
