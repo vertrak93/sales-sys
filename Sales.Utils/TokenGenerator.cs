@@ -67,7 +67,7 @@ namespace Sales.Utils
             return Convert.ToBase64String(randomNumber);
         }
 
-        public ClaimsPrincipal? GetClaimsPrincipalExpiredToken(string token, string keyJwt)
+        private ClaimsPrincipal? GetClaimsPrincipalExpiredToken(string token, string keyJwt)
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
