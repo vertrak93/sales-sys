@@ -19,7 +19,7 @@ namespace Sales.BLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<object> GetUsers()
+        public async Task<object> Get()
         {
             var users = await _unitOfWork.Users.Get().ToListAsync();
 

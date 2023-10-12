@@ -18,13 +18,11 @@ namespace Sales.API.Controllers.ProductControllers
     {
         private CategoryService _categoryService;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IOptions<AppSettingsDto> _appSettings;
         private readonly IMapper _mapper;
 
-        public CategoryController(IOptions<AppSettingsDto> appSettings, IUnitOfWork unitOfWork, IMapper mapper, CategoryService categoryService)
+        public CategoryController(IUnitOfWork unitOfWork, IMapper mapper, CategoryService categoryService)
         {
             _unitOfWork = unitOfWork;
-            _appSettings = appSettings;
             _mapper = mapper;
             _categoryService = categoryService;
         }

@@ -13,16 +13,16 @@ namespace Sales.API.Controllers.UserControllers
     {
         private IUnitOfWork _unitOfWork;
         private UserService _userService;
-        public UserController(IUnitOfWork unitOfWork)
+        public UserController(IUnitOfWork unitOfWork, UserService userService)
         {
             _unitOfWork = unitOfWork;
-            _userService = new UserService(_unitOfWork);
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var data = await _userService.GetUsers();
+            var data = await _userService.Get();
             return Ok(data);
         }
     }

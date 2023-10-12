@@ -18,13 +18,11 @@ namespace Sales.API.Controllers.ProductControllers
     {
         private PresentationService _presentationService;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IOptions<AppSettingsDto> _appSettings;
         private readonly IMapper _mapper;
 
-        public PresentationController(IOptions<AppSettingsDto> appSettings, IUnitOfWork unitOfWork, IMapper mapper, PresentationService presentationService)
+        public PresentationController(IUnitOfWork unitOfWork, IMapper mapper, PresentationService presentationService)
         {
             _unitOfWork = unitOfWork;
-            _appSettings = appSettings;
             _mapper = mapper;
             _presentationService = presentationService;
         }

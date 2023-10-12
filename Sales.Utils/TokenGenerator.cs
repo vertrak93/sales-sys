@@ -90,7 +90,7 @@ namespace Sales.Utils
         {
             var principalClaims = GetClaimsPrincipalExpiredToken(jwtToken, keyJwt);
 
-            return principalClaims.Identity.Name;
+            return principalClaims?.Identity?.Name ?? string.Empty;
         }
     }
 }
