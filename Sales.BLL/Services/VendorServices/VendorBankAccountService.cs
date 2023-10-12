@@ -27,7 +27,7 @@ namespace Sales.BLL.Services
 
         #region CRUD Methods
 
-        public async Task<VendorBankAccountDto> AddVendorBankAccount(VendorBankAccountDto vendorBankAccount)
+        public async Task<VendorBankAccountDto> Add(VendorBankAccountDto vendorBankAccount)
         {
 
             var newBankAccount = _mapper.Map<BankAccount>(vendorBankAccount);
@@ -42,23 +42,32 @@ namespace Sales.BLL.Services
             return new VendorBankAccountDto { VendorBankAccountId = dbVendorBankAccount.VendorBankAccountId };
         }
 
-        public bool UpdateVendorBankAccount(VendorBankAccountDto vendorBankAccount)
+        public async Task<bool> Update(VendorBankAccountDto vendorBankAccount)
         {
-            var updateBankAccount = _mapper.Map<BankAccount>(vendorBankAccount);
-            var updateVendorBankAccount = _mapper.Map<VendorBankAccount>(vendorBankAccount);
+            var dbBankAccount = await _unitOfWork.BankAccounts.Get(vendorBankAccount.BankAccountId);
+            var dbVendorBanckAccount = await _unitOfWork.VendorBankAccounts.Get(vendorBankAccount.VendorBankAccountId);
+
+            var updateBankAccount = _mapper.Map(vendorBankAccount, dbBankAccount);
+            var updateVendorBankAccount = _mapper.Map(vendorBankAccount, dbVendorBanckAccount);
 
             _unitOfWork.BankAccounts.Update(updateBankAccount);
             _unitOfWork.VendorBankAccounts.Update(updateVendorBankAccount);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
 
             return true;
+        }
+
+        public async Task<bool> Delete(int VendorBankAccountId)
+        {
+            var delVendor  = await DeleteVendorBankAccount(VendorBankAccountId);
+            await _unitOfWork.SaveAsync();
+            return delVendor;
         }
 
         public async Task<bool> DeleteVendorBankAccount(int VendorBankAccountId)
         {
             var delVendor = await _unitOfWork.VendorBankAccounts.Delete(VendorBankAccountId);
-            await DeleteBankAccount(VendorBankAccountId);
-            await _unitOfWork.SaveAsync();
+            var delBankAccount = await DeleteBankAccount(VendorBankAccountId);
             return delVendor;
         }
 

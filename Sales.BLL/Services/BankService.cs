@@ -49,7 +49,7 @@ namespace Sales.BLL.Services
             var dbObj = await _unitOfWork.Banks.Get(bank.BankId);
             var objBank = _mapper.Map(bank, dbObj);
             var obj = _unitOfWork.Banks.Update(objBank);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return obj;
         }
 

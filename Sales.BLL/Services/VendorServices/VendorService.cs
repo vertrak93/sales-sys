@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
+using Sales.Utils.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,24 +16,33 @@ namespace Sales.BLL.Services
     {
         #region Declarations
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly VendorAddressService _vendorAddressService;
+        private readonly VendorBankAccountService _vendorBankAccountService;
+        private readonly VendorPhoneService _vendorPhoneService;
 
-        public VendorService(IUnitOfWork unitOfWork)
+        public VendorService(IUnitOfWork unitOfWork, IMapper mapper, VendorAddressService vendorAddressService, VendorBankAccountService vendorBankAccountService, VendorPhoneService vendorPhoneService)
         {
             _unitOfWork = unitOfWork;
+            _vendorAddressService = vendorAddressService;
+            _vendorBankAccountService = vendorBankAccountService;
+            _vendorPhoneService = vendorPhoneService;
+            _mapper = mapper;
         }
         #endregion
 
         #region CRUD Methods
 
-        public async Task<VendorDto> AddVendor(Vendor vendor)
+        public async Task<VendorDto> Add(VendorDto vendor)
         {
-            var obj = await _unitOfWork.Vendors.Add(vendor);
+            var newObj = _mapper.Map<Vendor>(vendor);
+            var obj = await _unitOfWork.Vendors.Add(newObj);
             await _unitOfWork.SaveAsync();
 
             return new VendorDto { VendorId = obj.VendorId };
         }
 
-        public async Task<VendorDto> GetVendorAllData(int idVendor)
+        public async Task<VendorDto> GetById(int idVendor)
         {
             var vendorBankAccount = GetVendorBankAccounts(idVendor);
             var vendorPhone = GetVendorPhones(idVendor);
@@ -51,7 +62,7 @@ namespace Sales.BLL.Services
             };
         }
 
-        public async Task<IEnumerable<VendorDto>> GetVendors()
+        public async Task<IEnumerable<VendorDto>> Get()
         {
             var vendor = await _unitOfWork.Vendors.Get()
                 .Where(o => o.Active == true)
@@ -65,17 +76,24 @@ namespace Sales.BLL.Services
             return vendor;
         }
 
-        public bool UpdateVendor(Vendor vendor)
+        public async Task<bool> Update(VendorDto vendor)
         {
-            var obj = _unitOfWork.Vendors.Update(vendor);
-            _unitOfWork.Save();
+            var dbObj = await _unitOfWork.Vendors.Get(vendor.VendorId);
+            var updateVendor = _mapper.Map(vendor, dbObj);
+            var obj = _unitOfWork.Vendors.Update(updateVendor);
+            await _unitOfWork.SaveAsync();
             return obj;
         }
 
-        public async Task<bool> DeleteVendor(int VendorId)
+        public async Task<bool> Delete(int VendorId)
         {
+            await ValidateDeleteVendorProduct(VendorId);
+
             var delVendor = await _unitOfWork.Vendors.Delete(VendorId);
+
             await DeleteVendorAddress(VendorId);
+            await DeleteVendorBankAccount(VendorId);
+            await DeleteVendorPhone(VendorId);
 
             await _unitOfWork.SaveAsync();
             return delVendor;
@@ -83,18 +101,36 @@ namespace Sales.BLL.Services
 
         public async Task<bool> DeleteVendorAddress(int VendorId)
         {
-            var delAddress = await _unitOfWork.VendorAddresses.Get().Where( o => o.VendorId == VendorId && o.Active == true).ToListAsync();
+            var delAddress = await _unitOfWork.VendorAddresses.Get().Where(o => o.VendorId == VendorId && o.Active == true).ToListAsync();
 
-            foreach(var address in delAddress)
+            foreach (var address in delAddress)
             {
-                await _unitOfWork.VendorAddresses.Delete(address.VendorAddressId);
-                await _unitOfWork.Address.Delete(address.AddressId);
+                await _vendorAddressService.DeleteVendorAddress(address.VendorAddressId);
             }
-
             return true;
         }
 
+        public async Task<bool> DeleteVendorBankAccount(int VendorId)
+        {
+            var delBankAccount = await _unitOfWork.VendorBankAccounts.Get().Where(o => o.VendorId == VendorId && o.Active == true).ToListAsync();
 
+            foreach (var bankAccount in delBankAccount)
+            {
+                await _vendorBankAccountService.DeleteVendorBankAccount(bankAccount.VendorBankAccountId);
+            }
+            return true;
+        }
+
+        public async Task<bool> DeleteVendorPhone(int VendorId)
+        {
+            var delPhone = await _unitOfWork.VendorPhones.Get().Where(o => o.VendorId == VendorId && o.Active == true).ToListAsync();
+
+            foreach (var phone in delPhone)
+            {
+                await _vendorPhoneService.DeleteVendorPhone(phone.VendorPhoneId);
+            }
+            return true;
+        }
 
         public async Task<List<VendorBankAccountDto>> GetVendorBankAccounts(int idVendor)
         {
@@ -154,6 +190,18 @@ namespace Sales.BLL.Services
         #endregion
 
         #region Validations
+
+        public async Task ValidateDeleteVendorProduct(int idVendor)
+        {
+            var obj = await _unitOfWork.VendorProducts.Get().Where(o => o.VendorId == idVendor && o.Active == true).CountAsync();
+
+            if(obj > 0)
+            {
+                throw new Exception(Messages.ProductUseVendorDelete);
+            }
+
+            return;
+        }
 
         #endregion
 

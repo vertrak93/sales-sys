@@ -1,52 +1,36 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Sales.BLL.Services;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
-using Sales.DTOs.UtilsDto;
 using Sales.Utils.Constants;
 
-namespace Sales.API.Controllers.ProductControllers
+namespace Sales.API.Controllers.VendorControllers
 {
     [Authorize(Roles = "Administrator")]
-    [Route("api/brand")]
+    [Route("api/vendor/product")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class VendorProductController : ControllerBase
     {
-        private BrandService _brandService;
+        private VendorProductService _vendorProductService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BrandController(IUnitOfWork unitOfWork, IMapper mapper, BrandService brandService)
+        public VendorProductController(IUnitOfWork unitOfWork, IMapper mapper, VendorProductService vendorProductService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _brandService = brandService;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            try
-            {
-                var brands = await _brandService.Get();
-                return Ok(new ApiResponseDto { Data = brands, Message = Messages.GetedData });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ApiResponseDto.ErrorHandler(ex));
-            }
-
+            _vendorProductService = vendorProductService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(BrandDto brand)
+        public async Task<IActionResult> Post(VendorProductDto newObj)
         {
             try
             {
-                await _brandService.Add(brand);
+                await _vendorProductService.Add(newObj);
 
                 return Ok(new ApiResponseDto { Message = Messages.PostedData });
             }
@@ -57,11 +41,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(BrandDto brand)
+        public async Task<IActionResult> Patch(VendorProductDto patchObj)
         {
             try
             {
-                await _brandService.Update(brand);
+                await _vendorProductService.Update(patchObj);
                 return Ok(new ApiResponseDto { Message = Messages.PatchedData });
             }
             catch (Exception ex)
@@ -75,7 +59,7 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                await _brandService.Delete(id);
+                await _vendorProductService.Delete(id);
                 return Ok(new ApiResponseDto { Message = Messages.DeletedData });
             }
             catch (Exception ex)

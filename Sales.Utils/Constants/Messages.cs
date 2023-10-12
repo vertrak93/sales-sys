@@ -75,5 +75,8 @@ namespace Sales.Utils.Constants
 
         #endregion
 
+        #region Vendor
+        public const string ProductUseVendorDelete = "No es posible eliminar al proveedor, ya que tiene productos asociados";
+        #endregion
     }
 }

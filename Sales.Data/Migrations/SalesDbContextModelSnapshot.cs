@@ -60,7 +60,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("AccessId");
 
-                    b.ToTable("Access");
+                    b.ToTable("Access", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Address", b =>
@@ -97,7 +97,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Bank", b =>
@@ -133,7 +133,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("BankId");
 
-                    b.ToTable("Bank");
+                    b.ToTable("Bank", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.BankAccount", b =>
@@ -174,7 +174,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("BankId");
 
-                    b.ToTable("BankAccount");
+                    b.ToTable("BankAccount", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Brand", b =>
@@ -210,7 +210,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brand", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Category", b =>
@@ -246,7 +246,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Invoice", b =>
@@ -298,7 +298,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("InvoiceId");
 
-                    b.ToTable("Invoice");
+                    b.ToTable("Invoice", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Phone", b =>
@@ -343,7 +343,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("TelephonyId");
 
-                    b.ToTable("Phone");
+                    b.ToTable("Phone", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Presentation", b =>
@@ -379,7 +379,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("PresentationId");
 
-                    b.ToTable("Presentation");
+                    b.ToTable("Presentation", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.PriceType", b =>
@@ -415,7 +415,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("PriceTypeId");
 
-                    b.ToTable("PriceType");
+                    b.ToTable("PriceType", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Product", b =>
@@ -485,7 +485,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Purchase", b =>
@@ -537,7 +537,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("VendorId");
 
-                    b.ToTable("Purchase");
+                    b.ToTable("Purchase", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.PurchaseDetail", b =>
@@ -590,7 +590,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("VendorProductId");
 
-                    b.ToTable("PurchaseDetail");
+                    b.ToTable("PurchaseDetail", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.PurchaseType", b =>
@@ -626,7 +626,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("PurchaseTypeId");
 
-                    b.ToTable("PurchaseType");
+                    b.ToTable("PurchaseType", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.RefreshToken", b =>
@@ -654,7 +654,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshToken");
+                    b.ToTable("RefreshToken", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Role", b =>
@@ -690,7 +690,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Role");
+                    b.ToTable("Role", (string)null);
 
                     b.HasData(
                         new
@@ -741,7 +741,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleAccess");
+                    b.ToTable("RoleAccess", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.SubCategory", b =>
@@ -782,7 +782,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("SubCategory");
+                    b.ToTable("SubCategory", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.Telephony", b =>
@@ -818,7 +818,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("TelephonyId");
 
-                    b.ToTable("Telephony");
+                    b.ToTable("Telephony", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.User", b =>
@@ -880,7 +880,7 @@ namespace Sales.Data.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
 
                     b.HasData(
                         new
@@ -935,7 +935,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRole");
+                    b.ToTable("UserRole", (string)null);
 
                     b.HasData(
                         new
@@ -987,7 +987,7 @@ namespace Sales.Data.Migrations
 
                     b.HasKey("VendorId");
 
-                    b.ToTable("Vendor");
+                    b.ToTable("Vendor", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.VendorAddress", b =>
@@ -1028,7 +1028,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("VendorId");
 
-                    b.ToTable("VendorAddress");
+                    b.ToTable("VendorAddress", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.VendorBankAccount", b =>
@@ -1069,7 +1069,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("VendorId");
 
-                    b.ToTable("VendorBankAccount");
+                    b.ToTable("VendorBankAccount", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.VendorPhone", b =>
@@ -1110,7 +1110,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("VendorId");
 
-                    b.ToTable("VendorPhone");
+                    b.ToTable("VendorPhone", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.VendorProduct", b =>
@@ -1151,7 +1151,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("VendorId");
 
-                    b.ToTable("VendorProduct");
+                    b.ToTable("VendorProduct", (string)null);
                 });
 
             modelBuilder.Entity("Sales.Models.BankAccount", b =>

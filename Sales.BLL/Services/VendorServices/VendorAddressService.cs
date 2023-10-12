@@ -26,7 +26,7 @@ namespace Sales.BLL.Services
 
         #region CRUD Methods
 
-        public async Task<VendorAddressDto> AddVendorAddress(VendorAddressDto vendorAddress)
+        public async Task<VendorAddressDto> Add(VendorAddressDto vendorAddress)
         {
             
             var newAddress = _mapper.Map<Address>(vendorAddress);
@@ -41,23 +41,32 @@ namespace Sales.BLL.Services
             return new VendorAddressDto { VendorAddressId = dbVendorAddress.VendorAddressId };
         }
 
-        public bool UpdateVendorAddress(VendorAddressDto vendorAddress)
-        {
-            var updateAddress = _mapper.Map<Address>(vendorAddress);
-            var updateVendorAddress = _mapper.Map<VendorAddress>(vendorAddress);
+        public async Task<bool> Update(VendorAddressDto vendorAddress)
+        {            
+            var dbAddress = await _unitOfWork.Address.Get(vendorAddress.AddressId);
+            var dbVendorAdress = await _unitOfWork.VendorAddresses.Get(vendorAddress.AddressId);
+
+            var updateAddress = _mapper.Map(vendorAddress, dbAddress);
+            var updateVendorAddress = _mapper.Map(vendorAddress, dbVendorAdress);
 
             _unitOfWork.Address.Update(updateAddress);
             _unitOfWork.VendorAddresses.Update(updateVendorAddress);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
 
             return true;
+        }
+
+        public async Task<bool> Delete(int VendorAddressId)
+        {
+            var delVendor = await DeleteVendorAddress(VendorAddressId);
+            await _unitOfWork.SaveAsync();
+            return delVendor;
         }
 
         public async Task<bool> DeleteVendorAddress(int VendorAddressId)
         {
             var delVendor = await _unitOfWork.VendorAddresses.Delete(VendorAddressId);
             var delAddress = await DeleteAddress(VendorAddressId);
-            await _unitOfWork.SaveAsync();
             return delVendor;
         }
 

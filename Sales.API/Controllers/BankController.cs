@@ -1,29 +1,26 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Sales.BLL.Services;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
-using Sales.DTOs.UtilsDto;
 using Sales.Utils.Constants;
 
-namespace Sales.API.Controllers.ProductControllers
+namespace Sales.API.Controllers
 {
-    [Authorize(Roles = "Administrator")]
-    [Route("api/brand")]
+    [Route("api/bank")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class BankController : ControllerBase
     {
-        private BrandService _brandService;
+        private BankService _bankService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BrandController(IUnitOfWork unitOfWork, IMapper mapper, BrandService brandService)
+        public BankController(IUnitOfWork unitOfWork, IMapper mapper, BankService bankService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _brandService = brandService;
+            _bankService = bankService;
         }
 
         [HttpGet]
@@ -31,8 +28,8 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                var brands = await _brandService.Get();
-                return Ok(new ApiResponseDto { Data = brands, Message = Messages.GetedData });
+                var objs = await _bankService.Get();
+                return Ok(new ApiResponseDto { Data = objs, Message = Messages.GetedData });
             }
             catch (Exception ex)
             {
@@ -42,11 +39,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(BrandDto brand)
+        public async Task<IActionResult> Post(BankDto bank)
         {
             try
             {
-                await _brandService.Add(brand);
+                await _bankService.Add(bank);
 
                 return Ok(new ApiResponseDto { Message = Messages.PostedData });
             }
@@ -57,11 +54,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(BrandDto brand)
+        public async Task<IActionResult> Patch(BankDto bank)
         {
             try
             {
-                await _brandService.Update(brand);
+                await _bankService.Update(bank);
                 return Ok(new ApiResponseDto { Message = Messages.PatchedData });
             }
             catch (Exception ex)
@@ -75,7 +72,7 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                await _brandService.Delete(id);
+                await _bankService.Delete(id);
                 return Ok(new ApiResponseDto { Message = Messages.DeletedData });
             }
             catch (Exception ex)

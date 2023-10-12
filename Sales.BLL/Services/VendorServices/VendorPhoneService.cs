@@ -26,7 +26,7 @@ namespace Sales.BLL.Services
 
         #region CRUD Methods
 
-        public async Task<VendorPhoneDto> AddVendorPhone(VendorPhoneDto vendorPhone)
+        public async Task<VendorPhoneDto> Add(VendorPhoneDto vendorPhone)
         {
             var newPhone = _mapper.Map<Phone>(vendorPhone);
             var newVendorPhone = _mapper.Map<VendorPhone>(vendorPhone);
@@ -40,23 +40,32 @@ namespace Sales.BLL.Services
             return new VendorPhoneDto { VendorPhoneId = dbVendorPhone.VendorPhoneId };
         }
 
-        public bool UpdateVendorPhone(VendorPhoneDto vendorPhone)
+        public async Task<bool> Update(VendorPhoneDto vendorPhone)
         {
-            var updatePhone = _mapper.Map<Phone>(vendorPhone);
-            var updateVendorPhone = _mapper.Map<VendorPhone>(vendorPhone);
+            var dbPhone = await _unitOfWork.Phones.Get(vendorPhone.PhoneId);
+            var dbVendorPhone = await _unitOfWork.VendorPhones.Get(vendorPhone.VendorPhoneId);
+
+            var updatePhone = _mapper.Map(vendorPhone,dbPhone);
+            var updateVendorPhone = _mapper.Map(vendorPhone, dbVendorPhone);
 
             _unitOfWork.Phones.Update(updatePhone);
             _unitOfWork.VendorPhones.Update(updateVendorPhone);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
 
             return true;
+        }
+
+        public async Task<bool> Delete(int VendorPhoneId)
+        {
+            var delVendor = await DeleteVendorPhone(VendorPhoneId);
+            await _unitOfWork.SaveAsync();
+            return delVendor;
         }
 
         public async Task<bool> DeleteVendorPhone(int VendorPhoneId)
         {
             var delVendor = await _unitOfWork.VendorPhones.Delete(VendorPhoneId);
             await DeletePhone(VendorPhoneId);
-            await _unitOfWork.SaveAsync();
             return delVendor;
         }
 

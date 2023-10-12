@@ -10,9 +10,13 @@ namespace Sales.DTOs
     {
         public int ProductId { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public int? SubCategoryId { get; set; }
+        public string? SubCategoryName { get; set; }
         public int BrandId { get; set; }
+        public string BrandName { get; set; }
         public int PresentationId { get; set; }
+        public string PresentationName{ get; set; }
         public string ProductName { get; set; }
         public string SKU { get; set; }
         public decimal MinimumStock { get; set; }
