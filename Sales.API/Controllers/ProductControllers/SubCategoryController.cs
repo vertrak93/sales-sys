@@ -2,28 +2,25 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Sales.BLL.Services;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
-using Sales.DTOs.UtilsDto;
 using Sales.Utils.Constants;
 
 namespace Sales.API.Controllers.ProductControllers
 {
     [Authorize(Roles = "Administrator")]
-    [Route("api/category")]
+    [Route("api/subcategory")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class SubCategoryController : ControllerBase
     {
-        private CategoryService _categoryService;
+        private SubCategoryService _subCategoryService;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public CategoryController(IUnitOfWork unitOfWork, CategoryService categoryService)
+        public SubCategoryController(IUnitOfWork unitOfWork, SubCategoryService subCategoryService)
         {
             _unitOfWork = unitOfWork;
-            _categoryService = categoryService;
+            _subCategoryService = subCategoryService;
         }
 
         [HttpGet]
@@ -31,7 +28,7 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                var brands = await _categoryService.Get();
+                var brands = await _subCategoryService.Get();
                 return Ok(new ApiResponseDto { Data = brands, Message = Messages.GetedData });
             }
             catch (Exception ex)
@@ -42,11 +39,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CategoryDto category)
+        public async Task<IActionResult> Post(SubCategoryDto newObj)
         {
             try
             {
-                await _categoryService.Add(category);
+                await _subCategoryService.Add(newObj);
 
                 return Ok(new ApiResponseDto { Message = Messages.PostedData });
             }
@@ -57,11 +54,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(CategoryDto category)
+        public async Task<IActionResult> Patch(SubCategoryDto pathObj)
         {
             try
             {
-                await _categoryService.Update(category);
+                await _subCategoryService.Update(pathObj);
                 return Ok(new ApiResponseDto { Message = Messages.PatchedData });
             }
             catch (Exception ex)
@@ -75,7 +72,7 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                await _categoryService.Delete(id);
+                await _subCategoryService.Delete(id);
                 return Ok(new ApiResponseDto { Message = Messages.DeletedData });
             }
             catch (Exception ex)
@@ -83,6 +80,5 @@ namespace Sales.API.Controllers.ProductControllers
                 return BadRequest(ApiResponseDto.ErrorHandler(ex));
             }
         }
-
     }
 }
