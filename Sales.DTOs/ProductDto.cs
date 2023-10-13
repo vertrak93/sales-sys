@@ -17,6 +17,9 @@ namespace Sales.DTOs
         public string BrandName { get; set; }
         public int PresentationId { get; set; }
         public string PresentationName{ get; set; }
+        public int UnitOfMeasureId { get; set; }
+        public string UnitOfMeasureName { get; set; }
+        public string UnitOfMeasureAbbreviation { get; set; }
         public string ProductName { get; set; }
         public string SKU { get; set; }
         public decimal MinimumStock { get; set; }

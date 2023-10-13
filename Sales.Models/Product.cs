@@ -25,6 +25,9 @@ namespace Sales.Models
         [Required]
         public int PresentationId { get; set; }
 
+        [Required]
+        public int UnitOfMeasureId { get; set; }
+
         [Required, StringLength(100)]
         public string ProductName { get; set; }
 
@@ -35,7 +38,7 @@ namespace Sales.Models
         public decimal MinimumStock { get; set; }
 
         [DefaultValue(false)]
-        public bool? IsContainer { get; set; }
+        public bool IsContainer { get; set; }
 
         #region Modify Control
 
@@ -59,6 +62,7 @@ namespace Sales.Models
         public virtual SubCategory? SubCategory { get; set; }
         public virtual Brand Brand { get; set; }
         public virtual Presentation Presentation { get; set; }
+        public virtual UnitOfMeasure UnitOfMeasure { get; set; }
         public ICollection<VendorProduct>? VendorProducts { get; set; }
     }
 }

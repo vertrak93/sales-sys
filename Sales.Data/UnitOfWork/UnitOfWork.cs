@@ -42,7 +42,7 @@ namespace Sales.Data.UnitOfWork
         private IRepository<VendorBankAccount> _vendorBankAccount;
         private IRepository<VendorPhone> _vendorPhone;
         private IRepository<VendorProduct> _vendorProduct;
-
+        private IRepository<UnitOfMeasure> _unitOfMeasure;
 
         public IRepository<Access> Accesses
         {
@@ -175,6 +175,13 @@ namespace Sales.Data.UnitOfWork
             get
             {
                 return _telephony == null ? _telephony = new Repository<Telephony>(_context, UserName) : _telephony;
+            }
+        }
+        public IRepository<UnitOfMeasure> UnitOfMeasures
+        {
+            get
+            {
+                return _unitOfMeasure == null ? _unitOfMeasure = new Repository<UnitOfMeasure>(_context, UserName) : _unitOfMeasure;
             }
         }
         public IRepository<User> Users

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sales.Data.DataContext;
@@ -11,9 +12,11 @@ using Sales.Data.DataContext;
 namespace Sales.Data.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231013071233_13-10-2023#3")]
+    partial class _131020233
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -443,7 +446,7 @@ namespace Sales.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("IsContainer")
+                    b.Property<bool?>("IsContainer")
                         .HasColumnType("boolean");
 
                     b.Property<decimal>("MinimumStock")
@@ -703,7 +706,7 @@ namespace Sales.Data.Migrations
                             RoleId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 12, 33, 590, DateTimeKind.Local).AddTicks(8949),
                             RoleName = "Administrator"
                         });
                 });
@@ -934,7 +937,7 @@ namespace Sales.Data.Migrations
                             UserId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 12, 33, 590, DateTimeKind.Local).AddTicks(9090),
                             Email = "admin@admin",
                             FisrtName = "Admin",
                             LastName = "Admin",
@@ -989,7 +992,7 @@ namespace Sales.Data.Migrations
                             UserRoleId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 12, 33, 590, DateTimeKind.Local).AddTicks(9106),
                             RoleId = -1,
                             UserId = -1
                         });

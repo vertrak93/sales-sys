@@ -31,6 +31,7 @@ namespace Sales.Data.DataContext
         public DbSet<RoleAccess> RoleAccess { get; set; }
         public DbSet<SubCategory> SubCategory { get; set; }
         public DbSet<Telephony> Telephony { get; set; }
+        public DbSet<UnitOfMeasure> UnitOfMeasure { get; set; } 
         public DbSet<User> User { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Vendor> Vendor { get; set; }
@@ -50,13 +51,13 @@ namespace Sales.Data.DataContext
             modelBuilder.Entity<User>().HasIndex(x => x.Email).IsUnique();
 
             modelBuilder.Entity<Role>().HasData(
-                new Role() { RoleId = -1, RoleName = "Administrator", CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
+                new Role() { RoleId = -1, RoleName = "Administrator", CreatedBy = "Admin", CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0), Active = true });
             
             modelBuilder.Entity<User>().HasData(
-                new User() { UserId = -1, FisrtName = "Admin", LastName = "Admin", Username = "Admin", Password = "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", Email = "admin@admin", CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
+                new User() { UserId = -1, FisrtName = "Admin", LastName = "Admin", Username = "Admin", Password = "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", Email = "admin@admin", CreatedBy = "Admin", CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0), Active = true });
             
             modelBuilder.Entity<UserRole>().HasData(
-                new UserRole() { UserRoleId = -1, UserId = -1, RoleId = -1, CreatedBy = "Admin", CreatedDate = DateTime.Now, Active = true });
+                new UserRole() { UserRoleId = -1, UserId = -1, RoleId = -1, CreatedBy = "Admin", CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0), Active = true });
         }
 
     }

@@ -23,6 +23,9 @@ namespace Sales.Utils
             CreateMap<SubCategoryDto, SubCategory>().ReverseMap();
             CreateMap<TelephonyDto, Telephony>().ReverseMap();
 
+            CreateMap<UnitOfMeasureDto, UnitOfMeasure>().ReverseMap();
+
+
             CreateMap<VendorAddressDto, VendorAddress>().ReverseMap();
             CreateMap<VendorAddressDto, Address>().ReverseMap();
 

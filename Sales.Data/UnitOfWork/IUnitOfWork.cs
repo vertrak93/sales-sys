@@ -34,6 +34,7 @@ namespace Sales.Data.UnitOfWork
         public IRepository<RoleAccess> RoleAccesses { get; }
         public IRepository<SubCategory> SubCategories { get; }
         public IRepository<Telephony> Telephonies { get; }
+        public IRepository<UnitOfMeasure> UnitOfMeasures { get; }
         public IRepository<User> Users { get; }
         public IRepository<UserRole> UserRoles { get; }
         public IRepository<Vendor> Vendors { get; }

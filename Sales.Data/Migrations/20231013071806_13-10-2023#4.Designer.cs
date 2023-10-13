@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sales.Data.DataContext;
@@ -11,9 +12,11 @@ using Sales.Data.DataContext;
 namespace Sales.Data.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231013071806_13-10-2023#4")]
+    partial class _131020234
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -703,7 +706,7 @@ namespace Sales.Data.Migrations
                             RoleId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 18, 5, 932, DateTimeKind.Local).AddTicks(7531),
                             RoleName = "Administrator"
                         });
                 });
@@ -934,7 +937,7 @@ namespace Sales.Data.Migrations
                             UserId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 18, 5, 932, DateTimeKind.Local).AddTicks(7666),
                             Email = "admin@admin",
                             FisrtName = "Admin",
                             LastName = "Admin",
@@ -989,7 +992,7 @@ namespace Sales.Data.Migrations
                             UserRoleId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 18, 5, 932, DateTimeKind.Local).AddTicks(7678),
                             RoleId = -1,
                             UserId = -1
                         });

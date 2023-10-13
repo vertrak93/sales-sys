@@ -75,6 +75,10 @@ namespace Sales.Utils.Constants
 
         #endregion
 
+        #region UnitOfMeasure
+        public const string UnitOfMeasureUsed = "No es posible eliminar la unidad de medida, esta asociada a un produto activo";
+        #endregion
+
         #region Vendor
         public const string ProductUseVendorDelete = "No es posible eliminar al proveedor, ya que tiene productos asociados";
         #endregion

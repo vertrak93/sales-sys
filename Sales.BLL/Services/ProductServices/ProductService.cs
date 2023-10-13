@@ -48,10 +48,12 @@ namespace Sales.BLL.Services
                       join d in _unitOfWork.Presentations.Get() on a.PresentationId equals d.PresentationId
                       join e in _unitOfWork.SubCategories.Get() on new { a.SubCategoryId, Active = true } equals new { SubCategoryId = (int?)e.SubCategoryId, e.Active } into el
                       from subCat in el.DefaultIfEmpty()
+                      join f in _unitOfWork.UnitOfMeasures.Get() on a.UnitOfMeasureId equals f.UnitOfMeasureId
                       where a.Active == true
                       && b.Active == true
                       && c.Active == true
                       && d.Active == true
+                      && f.Active == true
                       select new ProductDto
                       {
                           ProductId = a.ProductId,
@@ -63,6 +65,9 @@ namespace Sales.BLL.Services
                           BrandName = c.BrandName,
                           PresentationId = a.PresentationId,
                           PresentationName = d.PresentationName,
+                          UnitOfMeasureId = a.UnitOfMeasureId,
+                          UnitOfMeasureName = f.Name,
+                          UnitOfMeasureAbbreviation = f.Abbreviation,
                           ProductName = a.ProductName,
                           SKU = a.SKU,
                           MinimumStock = a.MinimumStock,

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sales.Data.DataContext;
@@ -11,9 +12,11 @@ using Sales.Data.DataContext;
 namespace Sales.Data.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231013070524_13-10-2023#1")]
+    partial class _131020231
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -443,7 +446,7 @@ namespace Sales.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("IsContainer")
+                    b.Property<bool?>("IsContainer")
                         .HasColumnType("boolean");
 
                     b.Property<decimal>("MinimumStock")
@@ -472,7 +475,7 @@ namespace Sales.Data.Migrations
                     b.Property<int?>("SubCategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UnitOfMeasureId")
+                    b.Property<int?>("UnitOfMeasureId")
                         .HasColumnType("integer");
 
                     b.HasKey("ProductId");
@@ -703,7 +706,7 @@ namespace Sales.Data.Migrations
                             RoleId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 5, 24, 9, DateTimeKind.Local).AddTicks(9948),
                             RoleName = "Administrator"
                         });
                 });
@@ -934,7 +937,7 @@ namespace Sales.Data.Migrations
                             UserId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 5, 24, 10, DateTimeKind.Local).AddTicks(55),
                             Email = "admin@admin",
                             FisrtName = "Admin",
                             LastName = "Admin",
@@ -989,7 +992,7 @@ namespace Sales.Data.Migrations
                             UserRoleId = -1,
                             Active = true,
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2023, 10, 13, 1, 5, 24, 10, DateTimeKind.Local).AddTicks(66),
                             RoleId = -1,
                             UserId = -1
                         });
@@ -1248,9 +1251,7 @@ namespace Sales.Data.Migrations
 
                     b.HasOne("Sales.Models.UnitOfMeasure", "UnitOfMeasure")
                         .WithMany("Products")
-                        .HasForeignKey("UnitOfMeasureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitOfMeasureId");
 
                     b.Navigation("Brand");
 
