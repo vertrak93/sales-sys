@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sales.BLL.Services;
@@ -8,6 +9,7 @@ using Sales.Utils.Constants;
 
 namespace Sales.API.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     [Route("api/bank")]
     [ApiController]
     public class BankController : ControllerBase

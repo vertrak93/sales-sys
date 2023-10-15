@@ -44,21 +44,19 @@ namespace Sales.BLL.Services
 
         public async Task<VendorDto> GetById(int idVendor)
         {
-            var vendorBankAccount = GetVendorBankAccounts(idVendor);
-            var vendorPhone = GetVendorPhones(idVendor);
-            var vendorAddress = GetVendorAddresses(idVendor);
-            var vendor = _unitOfWork.Vendors.Get(idVendor);
-
-            await Task.WhenAll(vendorBankAccount, vendorPhone, vendorAddress, vendor);
+            var vendorBankAccount = await GetVendorBankAccounts(idVendor);
+            var vendorPhone = await GetVendorPhones(idVendor);
+            var vendorAddress = await GetVendorAddresses(idVendor);
+            var vendor = await _unitOfWork.Vendors.Get(idVendor);
 
             return new VendorDto
             {
-                VendorId = vendor.Result.VendorId,
-                VendorName = vendor.Result.VendorName,
-                TIN = vendor.Result.TIN,
-                VendorBankAccount = vendorBankAccount.Result,
-                VendorPhone = vendorPhone.Result,
-                VendorAddress = vendorAddress.Result
+                VendorId = vendor.VendorId,
+                VendorName = vendor.VendorName,
+                TIN = vendor.TIN,
+                VendorBankAccount = vendorBankAccount,
+                VendorPhone = vendorPhone,
+                VendorAddress = vendorAddress
             };
         }
 

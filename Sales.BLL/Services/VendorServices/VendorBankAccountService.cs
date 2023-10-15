@@ -33,8 +33,8 @@ namespace Sales.BLL.Services
             var newBankAccount = _mapper.Map<BankAccount>(vendorBankAccount);
             var newVendorBankAccount = _mapper.Map<VendorBankAccount>(vendorBankAccount);
 
-            var dbBanckAccount = await _unitOfWork.BankAccounts.Add(newBankAccount);
-            newVendorBankAccount.BankAccountId = dbBanckAccount.BankAccoutId;
+            await _unitOfWork.BankAccounts.Add(newBankAccount);
+            newVendorBankAccount.BankAccount = newBankAccount;
             var dbVendorBankAccount = await _unitOfWork.VendorBankAccounts.Add(newVendorBankAccount);
 
             await _unitOfWork.SaveAsync();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Sales.BLL.Services;
+using Sales.BLL.Services.ProductServices;
 
 namespace Sales.BLL
 {
@@ -17,6 +18,7 @@ namespace Sales.BLL
             services.AddScoped<ProductService>();
             services.AddScoped<SubCategoryService>();
             services.AddScoped<TelephonyService>();
+            services.AddScoped<UnitOfMeasureService>();
             services.AddScoped<VendorAddressService>();
             services.AddScoped<VendorBankAccountService>();
             services.AddScoped<VendorPhoneService>();

@@ -79,15 +79,10 @@ namespace Sales.BLL.Services
                                  ID = a.RefreshTokenId
                              }).ToListAsync();
 
-            List<Task<bool>> tasks = new List<Task<bool>>(); ;
-
-            obj.ForEach(obj =>
+            foreach(var item in obj)
             {
-                var task = _unitOfWork.RefreshTokens.Delete(obj.ID);
-                tasks.Add(task);
-            });
-
-            await Task.WhenAll(tasks);
+                await _unitOfWork.RefreshTokens.Delete(item.ID);
+            }
 
             return true;
         }

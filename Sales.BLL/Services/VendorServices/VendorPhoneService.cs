@@ -31,8 +31,8 @@ namespace Sales.BLL.Services
             var newPhone = _mapper.Map<Phone>(vendorPhone);
             var newVendorPhone = _mapper.Map<VendorPhone>(vendorPhone);
 
-            var dbPhone = await _unitOfWork.Phones.Add(newPhone);
-            newVendorPhone.PhoneId = dbPhone.PhoneId;
+            await _unitOfWork.Phones.Add(newPhone);
+            newVendorPhone.Phone = newPhone;
             var dbVendorPhone = await _unitOfWork.VendorPhones.Add(newVendorPhone);
 
             await _unitOfWork.SaveAsync();

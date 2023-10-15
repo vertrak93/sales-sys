@@ -1,26 +1,28 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sales.BLL.Services;
-using Sales.BLL.Services.ProductServices;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Utils.Constants;
 
-namespace Sales.API.Controllers.ProductControllers
+namespace Sales.API.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    [Route("api/unitofmeasure")]
+    [Route("api/telephony")]
     [ApiController]
-    public class UnitOfMeasureController : ControllerBase
+    public class TelephonyController : ControllerBase
     {
-        private UnitOfMeasureService _unitOfMeasureService;
+        private TelephonyService _telephonyService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UnitOfMeasureController(IUnitOfWork unitOfWork, UnitOfMeasureService unitOfMeasureService)
+        public TelephonyController(IUnitOfWork unitOfWork, IMapper mapper, TelephonyService telephonyService)
         {
             _unitOfWork = unitOfWork;
-            _unitOfMeasureService = unitOfMeasureService;
+            _mapper = mapper;
+            _telephonyService = telephonyService;
         }
 
         [HttpGet]
@@ -28,8 +30,8 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                var brands = await _unitOfMeasureService.Get();
-                return Ok(new ApiResponseDto { Data = brands, Message = Messages.GetedData });
+                var objs = await _telephonyService.Get();
+                return Ok(new ApiResponseDto { Data = objs, Message = Messages.GetedData });
             }
             catch (Exception ex)
             {
@@ -39,11 +41,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UnitOfMeasureDto newObj)
+        public async Task<IActionResult> Post(TelephonyDto newObj)
         {
             try
             {
-                await _unitOfMeasureService.Add(newObj);
+                await _telephonyService.Add(newObj);
 
                 return Ok(new ApiResponseDto { Message = Messages.PostedData });
             }
@@ -54,11 +56,11 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(UnitOfMeasureDto pathObj)
+        public async Task<IActionResult> Patch(TelephonyDto obj)
         {
             try
             {
-                await _unitOfMeasureService.Update(pathObj);
+                await _telephonyService.Update(obj);
                 return Ok(new ApiResponseDto { Message = Messages.PatchedData });
             }
             catch (Exception ex)
@@ -72,7 +74,7 @@ namespace Sales.API.Controllers.ProductControllers
         {
             try
             {
-                await _unitOfMeasureService.Delete(id);
+                await _telephonyService.Delete(id);
                 return Ok(new ApiResponseDto { Message = Messages.DeletedData });
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ namespace Sales.DTOs
     public class UnitOfMeasureDto
     {
         public int UnitOfMeasureId { get; set; }
-        public string Name { get; set; }
+        public string UnitOfMeasureName { get; set; }
         public string Abbreviation { get; set; }
     }
 }

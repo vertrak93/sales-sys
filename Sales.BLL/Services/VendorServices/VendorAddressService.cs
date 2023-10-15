@@ -32,8 +32,8 @@ namespace Sales.BLL.Services
             var newAddress = _mapper.Map<Address>(vendorAddress);
             var newVendorAddress = _mapper.Map<VendorAddress>(vendorAddress);
 
-            var dbAdrress = await _unitOfWork.Address.Add(newAddress);
-            newVendorAddress.AddressId = dbAdrress.AddressId;
+            await _unitOfWork.Address.Add(newAddress);
+            newVendorAddress.Address = newAddress;
             var dbVendorAddress = await _unitOfWork.VendorAddresses.Add(newVendorAddress);
 
             await _unitOfWork.SaveAsync();
