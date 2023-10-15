@@ -50,6 +50,11 @@ namespace Sales.BLL.Services
         public async Task<string> CreateRefreshToken(string userName, double expirationTime)
         {
             var user = await _unitOfWork.Users.Get().Where(obj => obj.Username == userName).FirstOrDefaultAsync();
+
+            if(user == null) { throw new Exception(Messages.InvalidUser); };
+
+            await InactiveAllRefresToken(user.UserId);
+
             DateTime now = DateTime.UtcNow;
 
             RefreshToken refreshToken = new RefreshToken();
@@ -58,11 +63,33 @@ namespace Sales.BLL.Services
             refreshToken.UserId = user.UserId;
             refreshToken.Token = token;
             refreshToken.Expiration = now.AddHours(expirationTime);
-            refreshToken.Active = true;
 
             await _unitOfWork.RefreshTokens.Add(refreshToken);
 
             return token;
+        }
+
+        public async Task<bool> InactiveAllRefresToken(int UserId)
+        {
+            var obj = await (from a in _unitOfWork.RefreshTokens.Get()
+                             where a.Active == true
+                             && a.UserId == UserId
+                             select new
+                             {
+                                 ID = a.RefreshTokenId
+                             }).ToListAsync();
+
+            List<Task<bool>> tasks = new List<Task<bool>>(); ;
+
+            obj.ForEach(obj =>
+            {
+                var task = _unitOfWork.RefreshTokens.Delete(obj.ID);
+                tasks.Add(task);
+            });
+
+            await Task.WhenAll(tasks);
+
+            return true;
         }
 
         public async Task<UserDto> ValidateLogin(AuthenticateDto auth)
@@ -119,8 +146,6 @@ namespace Sales.BLL.Services
             {
                 throw new Exception(Messages.TokenExpired);
             }
-
-            await _unitOfWork.RefreshTokens.Delete(objToken.RefreshToken.RefreshTokenId);
 
             var roles = await GetRolesUser(objToken.User.Username);
             var userDto = _mapper.Map<UserDto>(objToken.User);
