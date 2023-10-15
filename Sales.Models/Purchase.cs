@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Purchase
+    public class Purchase : BaseEntityModel
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PurchaseId { get; set; }
@@ -28,23 +28,6 @@ namespace Sales.Models
 
         [Required]
         public DateTime PaymentDeadline { get; set; }
-
-        [Required, DefaultValue(true)]
-        public bool Active { get; set; }
-
-        #region Modify Control
-        [Required, StringLength(100)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
-
-        [StringLength(100)]
-        public string? ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
-
-        #endregion
 
         public virtual Vendor Vendor { get; set; }
         public virtual PurchaseType PurchaseType { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Address
+    public class Address : BaseEntityModel
     {
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,23 +17,6 @@ namespace Sales.Models
 
         [Required, StringLength(200)]
         public string AddressDescription { get; set; }
-
-        [Required, DefaultValue(true)]
-        public bool Active { get; set; }
-
-        #region Modify Control
-        [Required, StringLength(100)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        public DateTime?CreatedDate { get; set; }
-
-        [StringLength(100)]
-        public string? ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
-
-        #endregion
 
         public ICollection<VendorAddress>? VendorAddresses { get; set; }
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class VendorPhone
+    public class VendorPhone : BaseEntityModel
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VendorPhoneId { get; set; }
@@ -19,24 +19,6 @@ namespace Sales.Models
 
         [Required]
         public int PhoneId { get; set; }
-
-        #region Modify Control
-
-        [Required, DefaultValue(true)]
-        public bool Active { get; set; }
-
-        [Required, StringLength(100)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
-
-        [StringLength(100)]
-        public string? ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
-
-        #endregion
 
         public virtual Phone Phone { get; set; }
         public virtual Vendor Vendor { get; set; }

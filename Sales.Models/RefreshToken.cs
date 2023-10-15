@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class RefreshToken
+    public class RefreshToken : BaseEntityModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,9 +23,6 @@ namespace Sales.Models
 
         [Required]
         public string Token { get; set; }
-
-        [Required, DefaultValue(true)]
-        public bool Active { get; set; }
 
         public virtual User User { get; set; }
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class PriceType
+    public class PriceType : BaseEntityModel
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PriceTypeId { get; set; }
@@ -17,21 +17,5 @@ namespace Sales.Models
         [Required, StringLength(100)]
         public string PriceTypeName { get; set; }
 
-        [Required, DefaultValue(true)]
-        public bool Active { get; set; }
-
-        #region Modify Control
-        [Required, StringLength(100)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
-
-        [StringLength(100)]
-        public string? ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
-
-        #endregion
     }
 }

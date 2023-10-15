@@ -38,7 +38,6 @@ namespace Sales.API.Controllers.UserControllers
         {
             try
             {
-                _unitOfWork.UserName = authenticate.Username;
                 var data = await _authService.Authenticate(authenticate, _appSettings.Value.KeyJwt, _appSettings.Value.ExpirationTimeJwt, _appSettings.Value.ExpirationRefreshToken);
 
                 return Ok(new ApiResponseDto
@@ -60,7 +59,6 @@ namespace Sales.API.Controllers.UserControllers
         {
             try
             {
-                _unitOfWork.UserName = TokenGenerator.Instance().GetUserFromJwt(tokens.Jwt, _appSettings.Value.KeyJwt);
                 var data = await _authService.RefreshToken(tokens, _appSettings.Value.KeyJwt, _appSettings.Value.ExpirationTimeJwt, _appSettings.Value.ExpirationRefreshToken);
 
                 return Ok(new ApiResponseDto

@@ -38,7 +38,7 @@ namespace Sales.BLL.Services.ProductServices
                 return new UnitOfMeasureDto
                 {
                     UnitOfMeasureId = o.UnitOfMeasureId,
-                    Name = o.Name,
+                    Name = o.UnitOfMeasureName,
                     Abbreviation = o.Abbreviation,
                 };
             });

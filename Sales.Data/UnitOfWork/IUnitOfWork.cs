@@ -12,8 +12,7 @@ namespace Sales.Data.UnitOfWork
 {
     public interface IUnitOfWork: IDisposable
     {
-
-        public string UserName { get; set; }
+        public string UserLogged { get; set; }
 
         public IRepository<Access> Accesses { get; }
         public IRepository<Address> Address { get; }

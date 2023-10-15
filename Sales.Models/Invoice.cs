@@ -10,7 +10,7 @@ using System.ComponentModel;
 
 namespace Sales.Models
 {
-    public class Invoice
+    public class Invoice : BaseEntityModel
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int InvoiceId { get; set; }
@@ -28,23 +28,6 @@ namespace Sales.Models
 
         [Required]
         public DateTime CertificationDate { get; set; }
-
-        [Required, DefaultValue(true)]
-        public bool Active { get; set; }
-
-        #region Modify Control
-        [Required, StringLength(100)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
-
-        [StringLength(100)]
-        public string? ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
-
-        #endregion
 
         public ICollection<Purchase>? Purchases { get; set;}
     }

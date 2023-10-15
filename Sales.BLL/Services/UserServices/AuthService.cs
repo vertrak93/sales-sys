@@ -99,8 +99,6 @@ namespace Sales.BLL.Services
 
         public async Task<TokenDto> RefreshToken(TokenDto tokens, string keyJwt, double expirationTime, double expirationTimeRT)
         {
-    
-
             var objToken = await (from a in _unitOfWork.RefreshTokens.Get()
                                   join b in _unitOfWork.Users.Get() on a.UserId equals b.UserId
                                   where a.Token == tokens.RefreshToken && a.Active == true && b.Active == true
@@ -110,7 +108,9 @@ namespace Sales.BLL.Services
                                       User = b,
                                   }).FirstOrDefaultAsync();
 
-            if (objToken.User.Username != _unitOfWork.UserName)
+            var userName = TokenGenerator.Instance().GetUserFromJwt(tokens.Jwt, keyJwt);
+
+            if (objToken.User.Username != userName)
             {
                 throw new Exception(Messages.InvalidUser);
             }

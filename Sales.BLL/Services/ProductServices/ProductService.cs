@@ -66,7 +66,7 @@ namespace Sales.BLL.Services
                           PresentationId = a.PresentationId,
                           PresentationName = d.PresentationName,
                           UnitOfMeasureId = a.UnitOfMeasureId,
-                          UnitOfMeasureName = f.Name,
+                          UnitOfMeasureName = f.UnitOfMeasureName,
                           UnitOfMeasureAbbreviation = f.Abbreviation,
                           ProductName = a.ProductName,
                           SKU = a.SKU,

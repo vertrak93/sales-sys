@@ -21,7 +21,7 @@ namespace Sales.API.Middlewares
 
                 if (claimName != null)
                 {
-                    unitOfWork.UserName = claimName.Value;
+                    unitOfWork.UserLogged = claimName.Value;
                 }
             }
 

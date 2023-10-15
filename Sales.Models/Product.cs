@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Sales.Models
 {
-    public class Product
+    public class Product : BaseEntityModel
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductId { get; set; }
@@ -39,24 +39,6 @@ namespace Sales.Models
 
         [DefaultValue(false)]
         public bool IsContainer { get; set; }
-
-        #region Modify Control
-
-        [Required, DefaultValue(true)]
-        public bool Active { get; set; }
-
-        [Required, StringLength(100)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
-
-        [StringLength(100)]
-        public string? ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
-
-        #endregion
 
         public virtual Category Category { get; set; }
         public virtual SubCategory? SubCategory { get; set; }

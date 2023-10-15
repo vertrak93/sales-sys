@@ -8,7 +8,7 @@ namespace Sales.Data.Repository
 {
     public interface IRepository<TEntity>
     {
-
+        public string UserLogged { get; }
         public IQueryable<TEntity> Get();
         public Task<TEntity> Get(int id);
         public Task<TEntity> Add(TEntity obj);
