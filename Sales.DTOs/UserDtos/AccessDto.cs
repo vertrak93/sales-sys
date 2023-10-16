@@ -10,5 +10,6 @@ namespace Sales.DTOs.UserDtos
     {
         public int AccessId { get; set; }
         public string AccessName { get; set; }
+        public string Description { get; set; }
     }
 }

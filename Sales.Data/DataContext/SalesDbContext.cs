@@ -45,13 +45,14 @@ namespace Sales.Data.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<Product>().HasIndex(x => x.SKU).IsUnique();
             modelBuilder.Entity<User>().HasIndex(x => x.Username).IsUnique();
             modelBuilder.Entity<User>().HasIndex(x => x.Email).IsUnique();
 
             modelBuilder.Entity<Role>().HasData(
-                new Role() { RoleId = -1, RoleName = "Administrator", CreatedBy = "Admin", CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0), Active = true });
+                new Role() { RoleId = -1, RoleName = "Administrator", CreatedBy = "Admin", CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0), Active = true },
+                new Role() { RoleName = "Seller", CreatedBy = "Admin", CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0), Active = true },
+                new Role() { RoleName = "Buyer", CreatedBy = "Admin", CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0), Active = true });
             
             modelBuilder.Entity<User>().HasData(
                 new User() { UserId = -1, FisrtName = "Admin", LastName = "Admin", Username = "Admin", Password = "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", Email = "admin@admin", CreatedBy = "Admin", CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0), Active = true });

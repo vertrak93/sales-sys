@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Sales.BLL.Services;
 using Sales.BLL.Services.ProductServices;
+using Sales.BLL.Services.UserServices;
 
 namespace Sales.BLL
 {
@@ -10,6 +11,8 @@ namespace Sales.BLL
         {
             services.AddScoped<AuthService>();
             services.AddScoped<UserService>();
+            services.AddScoped<UserRoleService>();
+            services.AddScoped<RoleService>();
 
             services.AddScoped<BankService>();
             services.AddScoped<BrandService>();

@@ -18,7 +18,7 @@ namespace Sales.Models
         public string AccessName { get; set; }
 
         [Required, StringLength(200)]
-        public string? Route { get; set; }
+        public string? Description { get; set; }
 
         public ICollection<RoleAccess>? RoleAccess { get; set; }
     }

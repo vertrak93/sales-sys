@@ -42,9 +42,10 @@ namespace Sales.BLL.Services
             });
         }
 
-        public async Task<Brand> Get(int id)
+        public async Task<BrandDto> Get(int id)
         {
-            var obj = await _unitOfWork.Brands.Get(id);
+            var dbDbj = await _unitOfWork.Brands.Get(id);
+            var obj = _mapper.Map<BrandDto>(dbDbj);
             return obj;
         }
 

@@ -26,6 +26,10 @@ namespace Sales.Utils.Constants
 
         #endregion
 
+        #region ChangePassword
+        public static readonly string PasswordChanged = "La contraseña se actualizo correctamente.";
+        #endregion
+
         #region Authenticate 
 
         public static readonly string UserDontExist = "El nombre de usuario no existe en el sistema.";

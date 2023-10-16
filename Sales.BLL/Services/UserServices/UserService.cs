@@ -33,7 +33,7 @@ namespace Sales.BLL.Services
             return users;
         }
 
-        public async Task<bool> Post(UserDto newObj)
+        public async Task<bool> Add(UserDto newObj)
         {
             await ValidatePostUser(newObj);
             var obj = _mapper.Map<User>(newObj);
@@ -45,7 +45,7 @@ namespace Sales.BLL.Services
             return true;
         }
 
-        public async Task<bool> Patch(UserDto patchObj)
+        public async Task<bool> Update(UserDto patchObj)
         {
             ValidateEmailFormat(patchObj);
             var dbObj = await _unitOfWork.Users.Get().Where(o => o.Username.ToUpper() == patchObj.Username.ToUpper()).FirstOrDefaultAsync();

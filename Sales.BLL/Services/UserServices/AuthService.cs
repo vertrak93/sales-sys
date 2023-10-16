@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Sales.BLL.Services.UserServices;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
@@ -18,11 +19,13 @@ namespace Sales.BLL.Services
         #region Declarations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly RoleService _roleService;
 
-        public AuthService(IUnitOfWork unitOfWork, IMapper mapper)
+        public AuthService(IUnitOfWork unitOfWork, IMapper mapper, RoleService roleService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _roleService = roleService;
         }
         #endregion
 
@@ -31,7 +34,7 @@ namespace Sales.BLL.Services
         public async Task<TokenDto> Authenticate(AuthenticateDto auth, string keyJwt, double expirationTime, double expirationTimeRT)
         {
             var user = await ValidateLogin(auth);
-            var roles = await GetRolesUser(user.Username);
+            var roles = await _roleService.GetRolesByUserId(user.UserId);
 
             var AccessToken = TokenGenerator.Instance().GenerateJWTToken(user, roles, keyJwt, expirationTime);
             var RefreshToken = await CreateRefreshToken(user.Username, expirationTimeRT);
@@ -100,25 +103,6 @@ namespace Sales.BLL.Services
             return user;
         }
 
-        public async Task<List<RoleDto>> GetRolesUser(string user)
-        {
-            var objRoles = await (from a in _unitOfWork.UserRoles.Get()
-                                  join b in _unitOfWork.Roles.Get() on new { a.RoleId, Active = true } equals new { b.RoleId, Active = (bool)b.Active }
-                                  join c in _unitOfWork.Users.Get() on a.UserId equals c.UserId
-                                  where c.Username.ToUpper() == user.Trim().ToUpper() &&
-                                        a.Active == true
-                                        && c.Active == true
-                                  select new RoleDto
-                                  {
-                                      RoleId = a.RoleId,
-                                      RoleName = b.RoleName,
-
-                                  }).ToListAsync(); ;
-
-            return objRoles;
-
-        }
-
         public async Task<TokenDto> RefreshToken(TokenDto tokens, string keyJwt, double expirationTime, double expirationTimeRT)
         {
             var objToken = await (from a in _unitOfWork.RefreshTokens.Get()
@@ -142,7 +126,7 @@ namespace Sales.BLL.Services
                 throw new Exception(Messages.TokenExpired);
             }
 
-            var roles = await GetRolesUser(objToken.User.Username);
+            var roles = await _roleService.GetRolesByUserId(objToken.User.UserId);
             var userDto = _mapper.Map<UserDto>(objToken.User);
 
             var Jwt = TokenGenerator.Instance().GenerateJWTToken(userDto, roles, keyJwt, expirationTime);
