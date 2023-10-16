@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sales.BLL.Services;
 using Sales.BLL.Services.UserServices;
@@ -9,6 +10,7 @@ using Sales.Utils.Constants;
 
 namespace Sales.API.Controllers.UserControllers
 {
+    [Authorize(Roles = "Administrator")]
     [Route("api/user/role")]
     [ApiController]
     public class UserRoleController : ControllerBase

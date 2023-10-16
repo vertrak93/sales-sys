@@ -23,10 +23,7 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 builder.Services.Configure<AppSettingsDto>(builder.Configuration.GetSection("MySettings"));
 
-builder.Services.AddDbContext<SalesDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DbConexion")));
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddAddDbContextPgSql(builder.Configuration);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
@@ -49,6 +46,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScopedServices();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    SalesDbContext context = scope.ServiceProvider.GetRequiredService<SalesDbContext>();
+    context.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
