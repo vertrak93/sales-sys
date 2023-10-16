@@ -46,7 +46,7 @@ namespace Sales.Data.DataContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<Product>().HasIndex(x => x.ProductId).IsUnique();
+            modelBuilder.Entity<Product>().HasIndex(x => x.SKU).IsUnique();
             modelBuilder.Entity<User>().HasIndex(x => x.Username).IsUnique();
             modelBuilder.Entity<User>().HasIndex(x => x.Email).IsUnique();
 
