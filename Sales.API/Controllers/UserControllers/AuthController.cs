@@ -34,7 +34,7 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(AuthenticateDto authenticate)
+        public async Task<ActionResult<ApiResponseDto>> Post(AuthenticateDto authenticate)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Sales.API.Controllers.UserControllers
 
         [HttpPost]
         [Route("refresh-token")]
-        public async Task<IActionResult> RefreshToken(TokenDto tokens)
+        public async Task<ActionResult<ApiResponseDto>> RefreshToken(TokenDto tokens)
         {
             try
             {

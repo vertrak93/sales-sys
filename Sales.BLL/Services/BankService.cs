@@ -24,11 +24,13 @@ namespace Sales.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task Add(BankDto bank)
+        public async Task<BankDto> Add(BankDto bank)
         {
             var objBank = _mapper.Map<Bank>(bank);
             await _unitOfWork.Banks.Add(objBank);
             await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<BankDto>(objBank);
         }
 
         public async Task<IEnumerable<BankDto>> Get()

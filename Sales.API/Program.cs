@@ -45,6 +45,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScopedServices();
 
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .WithOrigins("http://localhost:4200");
+}));
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -62,6 +71,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("corsapp");
 app.UseAuthentication();
 app.UseAuthorization();
 
