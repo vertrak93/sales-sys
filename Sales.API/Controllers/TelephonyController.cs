@@ -26,7 +26,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<ApiResponseDto>> Get()
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(TelephonyDto newObj)
+        public async Task<ActionResult<ApiResponseDto>> Post(TelephonyDto newObj)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(TelephonyDto obj)
+        public async Task<ActionResult<ApiResponseDto>> Patch(TelephonyDto obj)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<ApiResponseDto>> Delete(int id)
         {
             try
             {

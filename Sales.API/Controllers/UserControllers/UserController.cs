@@ -22,14 +22,14 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<ApiResponseDto>> Get()
         {
             var data = await _userService.Get();
             return Ok(data);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UserDto newObj)
+        public async Task<ActionResult<ApiResponseDto>> Post(UserDto newObj)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(UserDto obj)
+        public async Task<ActionResult<ApiResponseDto>> Patch(UserDto obj)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<ApiResponseDto>> Delete(int id)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Sales.API.Controllers.UserControllers
 
         [HttpPut]
         [Route("change-password")]
-        public async Task<IActionResult> ChangePassword(UserDto obj)
+        public async Task<ActionResult<ApiResponseDto>> ChangePassword(UserDto obj)
         {
             try
             {

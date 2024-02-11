@@ -28,7 +28,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<ApiResponseDto>> Get()
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(PresentationDto presentation)
+        public async Task<ActionResult<ApiResponseDto>> Post(PresentationDto presentation)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(PresentationDto presentation)
+        public async Task<ActionResult<ApiResponseDto>> Patch(PresentationDto presentation)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<ApiResponseDto>> Delete(int id)
         {
             try
             {

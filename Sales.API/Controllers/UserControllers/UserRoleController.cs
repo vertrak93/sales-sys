@@ -24,7 +24,7 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpGet("{userid}")]
-        public async Task<IActionResult> Get(int userid)
+        public async Task<ActionResult<ApiResponseDto>> Get(int userid)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UserRoleDto newObj)
+        public async Task<ActionResult<ApiResponseDto>> Post(UserRoleDto newObj)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<ApiResponseDto>> Delete(int id)
         {
             try
             {

@@ -28,7 +28,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<ApiResponseDto>> Get()
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<ActionResult<ApiResponseDto>> Get(int id)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(VendorDto newObj)
+        public async Task<ActionResult<ApiResponseDto>> Post(VendorDto newObj)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(VendorDto patchObj)
+        public async Task<ActionResult<ApiResponseDto>> Patch(VendorDto patchObj)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<ApiResponseDto>> Delete(int id)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpGet("{id}/product")]
-        public async Task<IActionResult> GetVendorProdct(int id)
+        public async Task<ActionResult<ApiResponseDto>> GetVendorProdct(int id)
         {
             try
             {

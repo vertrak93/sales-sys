@@ -26,7 +26,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(VendorPhoneDto newObj)
+        public async Task<ActionResult<ApiResponseDto>> Post(VendorPhoneDto newObj)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(VendorPhoneDto patchObj)
+        public async Task<ActionResult<ApiResponseDto>> Patch(VendorPhoneDto patchObj)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Sales.API.Controllers.VendorControllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<ApiResponseDto>> Delete(int id)
         {
             try
             {

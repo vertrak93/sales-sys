@@ -27,7 +27,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<ApiResponseDto>> Get()
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(BrandDto brand)
+        public async Task<ActionResult<ApiResponseDto>> Post(BrandDto brand)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(BrandDto brand)
+        public async Task<ActionResult<ApiResponseDto>> Patch(BrandDto brand)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<ApiResponseDto>> Delete(int id)
         {
             try
             {

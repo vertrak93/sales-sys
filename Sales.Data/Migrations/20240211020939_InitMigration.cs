@@ -1,13 +1,16 @@
-﻿using System;
+﻿
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Sales.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +22,7 @@ namespace Sales.Data.Migrations
                     AccessId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     AccessName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Route = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -216,6 +219,25 @@ namespace Sales.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UnitOfMeasure",
+                columns: table => new
+                {
+                    UnitOfMeasureId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UnitOfMeasureName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Abbreviation = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UnitOfMeasure", x => x.UnitOfMeasureId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -372,7 +394,11 @@ namespace Sales.Data.Migrations
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     Expiration = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Token = table.Column<string>(type: "text", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false)
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -528,10 +554,11 @@ namespace Sales.Data.Migrations
                     SubCategoryId = table.Column<int>(type: "integer", nullable: true),
                     BrandId = table.Column<int>(type: "integer", nullable: false),
                     PresentationId = table.Column<int>(type: "integer", nullable: false),
+                    UnitOfMeasureId = table.Column<int>(type: "integer", nullable: false),
                     ProductName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     SKU = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     MinimumStock = table.Column<decimal>(type: "numeric", nullable: false),
-                    IsContainer = table.Column<bool>(type: "boolean", nullable: true),
+                    IsContainer = table.Column<bool>(type: "boolean", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -564,6 +591,12 @@ namespace Sales.Data.Migrations
                         column: x => x.SubCategoryId,
                         principalTable: "SubCategory",
                         principalColumn: "SubCategoryId");
+                    table.ForeignKey(
+                        name: "FK_Product_UnitOfMeasure_UnitOfMeasureId",
+                        column: x => x.UnitOfMeasureId,
+                        principalTable: "UnitOfMeasure",
+                        principalColumn: "UnitOfMeasureId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -666,17 +699,22 @@ namespace Sales.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "RoleId", "Active", "CreatedBy", "CreatedDate", "ModifiedBy", "ModifiedDate", "RoleName" },
-                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 8, 2, 49, 31, 320, DateTimeKind.Local).AddTicks(4389), null, null, "Administrator" });
+                values: new object[,]
+                {
+                    { -1, true, "Admin", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Administrator" },
+                    { 1, true, "Admin", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Seller" },
+                    { 2, true, "Admin", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Buyer" }
+                });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "UserId", "Active", "CreatedBy", "CreatedDate", "Email", "FisrtName", "LastName", "ModifiedBy", "ModifiedDate", "Password", "Username" },
-                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 8, 2, 49, 31, 320, DateTimeKind.Local).AddTicks(4504), "admin@admin", "Admin", "Admin", null, null, "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", "Admin" });
+                values: new object[] { -1, true, "Admin", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@admin", "Admin", "Admin", null, null, "39dc14dc1feac6be2702abb4e486f2bc755b0777c827457b24dae658f6266494", "Admin" });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
                 columns: new[] { "UserRoleId", "Active", "CreatedBy", "CreatedDate", "ModifiedBy", "ModifiedDate", "RoleId", "UserId" },
-                values: new object[] { -1, true, "Admin", new DateTime(2023, 10, 8, 2, 49, 31, 320, DateTimeKind.Local).AddTicks(4517), null, null, -1, -1 });
+                values: new object[] { -1, true, "Admin", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, -1, -1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BankAccount_BankId",
@@ -704,15 +742,20 @@ namespace Sales.Data.Migrations
                 column: "PresentationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_ProductId",
+                name: "IX_Product_SKU",
                 table: "Product",
-                column: "ProductId",
+                column: "SKU",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_SubCategoryId",
                 table: "Product",
                 column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Product_UnitOfMeasureId",
+                table: "Product",
+                column: "UnitOfMeasureId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Purchase_InvoiceId",
@@ -899,6 +942,9 @@ namespace Sales.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "SubCategory");
+
+            migrationBuilder.DropTable(
+                name: "UnitOfMeasure");
 
             migrationBuilder.DropTable(
                 name: "Category");

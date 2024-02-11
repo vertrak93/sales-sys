@@ -12,8 +12,8 @@ using Sales.Data.DataContext;
 namespace Sales.Data.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    [Migration("20231015054119_10-14-2023#1")]
-    partial class _101420231
+    [Migration("20240211020939_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,17 +49,17 @@ namespace Sales.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Route")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
 
                     b.HasKey("AccessId");
 
@@ -485,7 +485,7 @@ namespace Sales.Data.Migrations
 
                     b.HasIndex("PresentationId");
 
-                    b.HasIndex("ProductId")
+                    b.HasIndex("SKU")
                         .IsUnique();
 
                     b.HasIndex("SubCategoryId");
@@ -722,6 +722,22 @@ namespace Sales.Data.Migrations
                             CreatedBy = "Admin",
                             CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            Active = true,
+                            CreatedBy = "Admin",
+                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RoleName = "Seller"
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            Active = true,
+                            CreatedBy = "Admin",
+                            CreatedDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RoleName = "Buyer"
                         });
                 });
 

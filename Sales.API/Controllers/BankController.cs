@@ -26,7 +26,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<ApiResponseDto>> Get()
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(BankDto bank)
+        public async Task<ActionResult<ApiResponseDto>> Post(BankDto bank)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(BankDto bank)
+        public async Task<ActionResult<ApiResponseDto>> Patch(BankDto bank)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Sales.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<ApiResponseDto>> Delete(int id)
         {
             try
             {
