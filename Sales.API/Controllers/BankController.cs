@@ -45,9 +45,9 @@ namespace Sales.API.Controllers
         {
             try
             {
-                await _bankService.Add(bank);
+                var result = await _bankService.Add(bank);
 
-                return Ok(new ApiResponseDto { Message = Messages.PostedData });
+                return Ok(new ApiResponseDto { Data= result, Message = Messages.PostedData });
             }
             catch (Exception ex)
             {
