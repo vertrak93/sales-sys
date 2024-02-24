@@ -11,9 +11,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sales.Utils
+namespace Sales.Utils.Jwt
 {
-    
+
     public class TokenGenerator
     {
 
@@ -21,7 +21,7 @@ namespace Sales.Utils
 
         public static TokenGenerator Instance()
         {
-            if(_instance == null) _instance= new TokenGenerator();
+            if (_instance == null) _instance = new TokenGenerator();
             return _instance;
         }
 

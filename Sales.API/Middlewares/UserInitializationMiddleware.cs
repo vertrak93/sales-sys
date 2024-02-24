@@ -14,16 +14,16 @@ namespace Sales.API.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var unitOfWork = context.RequestServices.GetRequiredService<IUnitOfWork>();
-            if (context.User.Identity.IsAuthenticated)
-            {
-                var claimName = context.User.FindFirst(ClaimTypes.Name);
+            //var unitOfWork = context.RequestServices.GetRequiredService<IUnitOfWork>();
+            //if (context.User.Identity.IsAuthenticated)
+            //{
+            //    var claimName = context.User.FindFirst(ClaimTypes.Name);
 
-                if (claimName != null)
-                {
-                    unitOfWork.UserLogged = claimName.Value;
-                }
-            }
+            //    if (claimName != null)
+            //    {
+            //        unitOfWork.UserLogged = claimName.Value;
+            //    }
+            //}
 
             await _next(context);
         }

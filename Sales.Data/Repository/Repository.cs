@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sales.Data.DataContext;
 using Sales.Models;
+using Sales.Utils.Jwt.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,17 @@ namespace Sales.Data.Repository
     {
         private SalesDbContext _context;
         private DbSet<TEntity> _dbSet;
+        private ICurrentUser _currentUser;
 
         private string _UserLogged = string.Empty;
         public string UserLogged { get { return _UserLogged; } }
 
-        public Repository(SalesDbContext context, string UserLogged)
+        public Repository(SalesDbContext context, ICurrentUser currentUser)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
-            _UserLogged = UserLogged;
+            _currentUser = currentUser;
+            _UserLogged = _currentUser.GetUserId();
         }
 
         public async Task<TEntity> Add(TEntity obj)

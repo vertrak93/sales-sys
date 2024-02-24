@@ -5,6 +5,7 @@ using Sales.BLL.Services;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 
 namespace Sales.API.Controllers.UserControllers
 {
@@ -22,9 +23,9 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponseDto>> Get()
+        public async Task<ActionResult<ApiResponseDto>> Get([FromQuery] PaginationParams paginationParams)
         {
-            var data = await _userService.Get();
+            var data = await _userService.Get(paginationParams);
             return Ok(data);
         }
 

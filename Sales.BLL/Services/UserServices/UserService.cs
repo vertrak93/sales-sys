@@ -5,6 +5,7 @@ using Sales.DTOs;
 using Sales.Models;
 using Sales.Utils;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 using System.Text.RegularExpressions;
 
 namespace Sales.BLL.Services
@@ -20,17 +21,29 @@ namespace Sales.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UserDto>> Get()
+        public async Task<IEnumerable<UserDto>> Get(PaginationParams paginationParams)
         {
-            var users = await _unitOfWork.Users.Get().Where(o => o.Active == true).Select(el => new UserDto
-            {
-                Username = el.Username,
-                FisrtName = el.FisrtName,
-                LastName = el.LastName,
-                Email = el.Email,
-            }).ToListAsync();
+            var users = _unitOfWork.Users.Get().Where(o => o.Active == true)
+                .Select(el => new UserDto
+                {
+                    Username = el.Username,
+                    FisrtName = el.FisrtName,
+                    LastName = el.LastName,
+                    Email = el.Email,
+                });
 
-            return users;
+            if (!string.IsNullOrEmpty(paginationParams.Filter))
+            {
+                users = users.Where(item =>
+                    item.Username.Contains(paginationParams.Filter) ||
+                    item.FisrtName.Contains(paginationParams.Filter) ||
+                    item.LastName.Contains(paginationParams.Filter) ||
+                    item.Email.Contains(paginationParams.Filter));
+            }
+
+            return await users.Skip(paginationParams.Start)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
         }
 
         public async Task<bool> Add(UserDto newObj)

@@ -8,6 +8,8 @@ using Sales.Utils;
 using System.Text;
 using Sales.BLL;
 using Sales.API.Middlewares;
+using Sales.Utils.Jwt.Interfaces;
+using Sales.Utils.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +22,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
-
 builder.Services.Configure<AppSettingsDto>(builder.Configuration.GetSection("MySettings"));
-
 builder.Services.AddAddDbContextPgSql(builder.Configuration);
+builder.Services.AddScopedServices();
+
+builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
@@ -43,8 +47,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddScopedServices();
-
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
     builder
@@ -56,10 +58,13 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 
 var app = builder.Build();
 
+
+
+
 using (var scope = app.Services.CreateScope())
 {
     SalesDbContext context = scope.ServiceProvider.GetRequiredService<SalesDbContext>();
-    context.Database.Migrate();
+    //context.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
@@ -75,7 +80,7 @@ app.UseCors("corsapp");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMiddleware<UserInitializationMiddleware>(); //initializer username
+//app.UseMiddleware<UserInitializationMiddleware>(); //initializer username
 
 app.MapControllers();
 

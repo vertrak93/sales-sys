@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sales.Models\Sales.Models.csproj" />
+    <ProjectReference Include="..\Sales.Utils\Sales.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
