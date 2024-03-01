@@ -38,7 +38,7 @@ namespace Sales.BLL.Services
             var roles = await _roleService.GetRolesByUserId(user.UserId);
 
             var AccessToken = TokenGenerator.Instance().GenerateJWTToken(user, roles, keyJwt, expirationTime);
-            var RefreshToken = await CreateRefreshToken(user.Username, expirationTimeRT);
+            var RefreshToken = await CreateRefreshToken(user, expirationTimeRT);
 
             await _unitOfWork.SaveAsync();
 
@@ -51,10 +51,8 @@ namespace Sales.BLL.Services
             };
         }
 
-        public async Task<string> CreateRefreshToken(string userName, double expirationTime)
+        public async Task<string> CreateRefreshToken(UserDto user, double expirationTime)
         {
-            var user = await _unitOfWork.Users.Get().Where(obj => obj.Username == userName).FirstOrDefaultAsync();
-
             if(user == null) { throw new Exception(Messages.InvalidUser); };
 
             await InactiveAllRefresToken(user.UserId);
@@ -131,7 +129,7 @@ namespace Sales.BLL.Services
             var userDto = _mapper.Map<UserDto>(objToken.User);
 
             var Jwt = TokenGenerator.Instance().GenerateJWTToken(userDto, roles, keyJwt, expirationTime);
-            var RefreshToken = await CreateRefreshToken(objToken.User.Username, expirationTimeRT);
+            var RefreshToken = await CreateRefreshToken(userDto, expirationTimeRT);
 
             await _unitOfWork.SaveAsync();
 

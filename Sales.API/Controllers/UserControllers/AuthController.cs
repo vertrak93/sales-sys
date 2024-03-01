@@ -34,6 +34,7 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpPost]
+        [Route("login")]
         public async Task<ActionResult<ApiResponseDto>> Post(AuthenticateDto authenticate)
         {
             try

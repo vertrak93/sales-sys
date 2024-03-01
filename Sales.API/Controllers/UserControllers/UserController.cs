@@ -14,19 +14,24 @@ namespace Sales.API.Controllers.UserControllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private IUnitOfWork _unitOfWork;
         private UserService _userService;
-        public UserController(IUnitOfWork unitOfWork, UserService userService)
+        public UserController(UserService userService)
         {
-            _unitOfWork = unitOfWork;
             _userService = userService;
         }
 
         [HttpGet]
         public async Task<ActionResult<ApiResponseDto>> Get([FromQuery] PaginationParams paginationParams)
         {
-            var data = await _userService.Get(paginationParams);
-            return Ok(data);
+            try
+            {
+                var result = await _userService.Get(paginationParams);
+                return Ok(new ApiResponseDto { Data = result.Item1, Total= result.Item2, Message = Messages.GetedData });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResponseDto.ErrorHandler(ex));
+            }
         }
 
         [HttpPost]
@@ -35,8 +40,8 @@ namespace Sales.API.Controllers.UserControllers
             try
             {
                 await _userService.Add(newObj);
-
                 return Ok(new ApiResponseDto { Message = Messages.PostedData });
+
             }
             catch (Exception ex)
             {

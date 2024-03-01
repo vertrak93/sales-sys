@@ -21,7 +21,7 @@ namespace Sales.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UserDto>> Get(PaginationParams paginationParams)
+        public async Task<(IEnumerable<UserDto>, int)> Get(PaginationParams paginationParams)
         {
             var users = _unitOfWork.Users.Get().Where(o => o.Active == true)
                 .Select(el => new UserDto
@@ -41,9 +41,12 @@ namespace Sales.BLL.Services
                     item.Email.Contains(paginationParams.Filter));
             }
 
-            return await users.Skip(paginationParams.Start)
+            var total = (await users.CountAsync());
+            var result = await users.Skip(paginationParams.Start)
                 .Take(paginationParams.PageSize)
                 .ToListAsync();
+
+            return (result, total);
         }
 
         public async Task<bool> Add(UserDto newObj)
