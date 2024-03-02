@@ -25,8 +25,8 @@ namespace Sales.API.Controllers.UserControllers
         {
             try
             {
-                var result = await _userService.Get(paginationParams);
-                return Ok(new ApiResponseDto { Data = result.Item1, Total= result.Item2, Message = Messages.GetedData });
+                var (data, total) = await _userService.Get(paginationParams);
+                return Ok(new ApiResponseDto { Data = data, Total= total, Message = Messages.GetedData });
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@ using Sales.DTOs;
 using Sales.DTOs.UserDtos;
 using Sales.Models;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,22 +32,26 @@ namespace Sales.BLL.Services.UserServices
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<UserRoleDto>> GetByUserIdAsigned(int UserId)
+        public async Task<(IEnumerable<UserRoleDto>, int)> GetByUserIdAsigned(int UserId, PaginationParams paginationParams)
         {
-            var obj = await (from a in _unitOfWork.Roles.Get()
-                             join b in _unitOfWork.UserRoles.Get() on new { Active = true, RoleId = a.RoleId } equals new { b.Active, b.RoleId } into lb
+            var roleUsers =  from a in _unitOfWork.Roles.Get()
+                             join b in _unitOfWork.UserRoles.Get() on new { Active = true, RoleId = a.RoleId, UserId = UserId } equals new { b.Active, b.RoleId, b.UserId } into lb
                              from c in lb.DefaultIfEmpty()
-                             where c.UserId == UserId
-                             && a.Active == true
                              select new UserRoleDto
                              {
-                                 UserRoleId = c.UserId,
+                                 UserRoleId = c.UserRoleId,
                                  UserId = c.UserId,
                                  RoleId = a.RoleId,
                                  RoleName = a.RoleName
-                             }).ToListAsync();
+                             };
 
-            return obj;
+            var total = await roleUsers.CountAsync();
+            var result = await roleUsers
+                .Skip(paginationParams.Start)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
+
+            return (result,total);
         }
 
         public async Task<IEnumerable<UserRoleDto>> GetByUserId(int UserId)

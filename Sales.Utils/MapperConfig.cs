@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Sales.DTOs;
+using Sales.DTOs.UserDtos;
 using Sales.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Sales.Utils
        public MapperConfig()
         {
             CreateMap<UserDto, User>().ReverseMap();
+            CreateMap<UserRoleDto, UserRole>().ReverseMap();
 
             CreateMap<BankDto, Bank>().ReverseMap();
             CreateMap<BrandDto, Brand>().ReverseMap();

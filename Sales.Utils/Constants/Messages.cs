@@ -10,7 +10,7 @@ namespace Sales.Utils.Constants
     {
         #region ApiResponse
         public static readonly string GetedData = "Datos obtenidos";
-        public static readonly string PostedData = "Datos posteados";
+        public static readonly string PostedData = "Datos almacenados";
         public static readonly string PatchedData = "Datos acualizados";
         public static readonly string DeletedData = "Datos eliminados";
         public static readonly string AccionSucceed = "Acción exitosa";

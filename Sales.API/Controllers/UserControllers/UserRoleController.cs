@@ -7,6 +7,7 @@ using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.DTOs.UserDtos;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 
 namespace Sales.API.Controllers.UserControllers
 {
@@ -24,12 +25,12 @@ namespace Sales.API.Controllers.UserControllers
         }
 
         [HttpGet("{userid}")]
-        public async Task<ActionResult<ApiResponseDto>> Get(int userid)
+        public async Task<ActionResult<ApiResponseDto>> Get(int userid, [FromQuery] PaginationParams parameters)
         {
             try
             {
-                var data = await _userRoleService.GetByUserIdAsigned(userid);
-                return Ok(new ApiResponseDto { Data = data, Message = Messages.GetedData });
+                var (data, total) = await _userRoleService.GetByUserIdAsigned(userid, parameters);
+                return Ok(new ApiResponseDto { Data = data, Total = total, Message = Messages.GetedData });
             }
             catch (Exception ex)
             {

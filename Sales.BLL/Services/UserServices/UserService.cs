@@ -26,6 +26,7 @@ namespace Sales.BLL.Services
             var users = _unitOfWork.Users.Get().Where(o => o.Active == true)
                 .Select(el => new UserDto
                 {
+                    UserId = el.UserId,
                     Username = el.Username,
                     FisrtName = el.FisrtName,
                     LastName = el.LastName,
@@ -35,10 +36,10 @@ namespace Sales.BLL.Services
             if (!string.IsNullOrEmpty(paginationParams.Filter))
             {
                 users = users.Where(item =>
-                    item.Username.Contains(paginationParams.Filter) ||
-                    item.FisrtName.Contains(paginationParams.Filter) ||
-                    item.LastName.Contains(paginationParams.Filter) ||
-                    item.Email.Contains(paginationParams.Filter));
+                    item.Username.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.FisrtName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.LastName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.Email.ToUpper().Contains(paginationParams.Filter.ToUpper()));
             }
 
             var total = (await users.CountAsync());
@@ -64,7 +65,8 @@ namespace Sales.BLL.Services
         public async Task<bool> Update(UserDto patchObj)
         {
             ValidateEmailFormat(patchObj);
-            var dbObj = await _unitOfWork.Users.Get().Where(o => o.Username.ToUpper() == patchObj.Username.ToUpper()).FirstOrDefaultAsync();
+            var dbObj = await _unitOfWork.Users.Get().Where(o => o.UserId == patchObj.UserId).FirstOrDefaultAsync();
+            patchObj.Password = dbObj.Password;
             var obj = _mapper.Map(patchObj, dbObj);
             var resutl = _unitOfWork.Users.Update(obj);
 
