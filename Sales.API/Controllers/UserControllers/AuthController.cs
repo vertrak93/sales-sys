@@ -50,7 +50,7 @@ namespace Sales.API.Controllers.UserControllers
 
             }catch (Exception ex)
             {
-                return BadRequest(ApiResponseDto.ErrorHandler(ex));
+                return StatusCode((int)HttpCodesEnum.LoginError, ApiResponseDto.ErrorHandler(ex));
             }
         }
 
