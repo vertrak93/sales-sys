@@ -6,6 +6,7 @@ using Sales.Models;
 using Sales.Utils;
 using Sales.Utils.Constants;
 using Sales.Utils.UtilsDto;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Sales.BLL.Services
@@ -23,7 +24,7 @@ namespace Sales.BLL.Services
 
         public async Task<(IEnumerable<UserDto>, int)> Get(PaginationParams paginationParams)
         {
-            var users = _unitOfWork.Users.Get().Where(o => o.Active == true)
+            var users = _unitOfWork.Users.Get()
                 .Select(el => new UserDto
                 {
                     UserId = el.UserId,
@@ -31,6 +32,7 @@ namespace Sales.BLL.Services
                     FisrtName = el.FisrtName,
                     LastName = el.LastName,
                     Email = el.Email,
+                    Active = el.Active
                 });
 
             if (!string.IsNullOrEmpty(paginationParams.Filter))
@@ -93,6 +95,13 @@ namespace Sales.BLL.Services
         public async Task<bool> Delete(int id)
         {
             var result = await _unitOfWork.Users.Delete(id);
+            await _unitOfWork.SaveAsync();
+            return result;
+        }
+
+        public async Task<bool> Activate(int id)
+        {
+            var result = await _unitOfWork.Users.Activate(id);
             await _unitOfWork.SaveAsync();
             return result;
         }

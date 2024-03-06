@@ -77,6 +77,20 @@ namespace Sales.API.Controllers.UserControllers
             }
         }
 
+        [HttpPatch("activate/{id}")]
+        public async Task<ActionResult<ApiResponseDto>> Activate(int id)
+        {
+            try
+            {
+                await _userService.Active(id);
+                return Ok(new ApiResponseDto { Message = Messages.DeletedData });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResponseDto.ErrorHandler(ex));
+            }
+        }
+
         [HttpPut]
         [Route("change-password")]
         public async Task<ActionResult<ApiResponseDto>> ChangePassword(UserDto obj)

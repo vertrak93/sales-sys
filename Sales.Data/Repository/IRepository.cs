@@ -13,6 +13,7 @@ namespace Sales.Data.Repository
         public Task<TEntity> Get(int id);
         public Task<TEntity> Add(TEntity obj);
         public Task<bool> Delete(int id);
+        public Task<bool> Activate(int id);
         public bool Update(TEntity obj);
 
     }

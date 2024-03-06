@@ -42,11 +42,25 @@ namespace Sales.Data.Repository
             if (obj == null)
                 return true;
             
-            await ApplySoftDelete(obj);
+            await ChangeState(obj, false);
             await SetModifierAsync(obj);
 
             _dbSet.Entry(obj).State = EntityState.Modified;     
             
+            return true;
+        }
+
+        public async Task<bool> Activate(int id)
+        {
+            var obj = await _dbSet.FindAsync(id);
+            if (obj == null)
+                return true;
+
+            await ChangeState(obj, true);
+            await SetModifierAsync(obj);
+
+            _dbSet.Entry(obj).State = EntityState.Modified;
+
             return true;
         }
 
@@ -88,9 +102,9 @@ namespace Sales.Data.Repository
             obj.Active = true;
         }
 
-        private async Task ApplySoftDelete(TEntity obj)
+        private async Task ChangeState(TEntity obj, bool active)
         {
-            obj.Active = false;
+            obj.Active = active;
         }
     }
 }
