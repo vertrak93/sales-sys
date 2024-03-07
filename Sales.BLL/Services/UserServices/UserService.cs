@@ -118,7 +118,7 @@ namespace Sales.BLL.Services
 
         public async Task ValidateExistingUser(UserDto user)
         {
-            var objUser = await _unitOfWork.Users.Get().Where(obj => obj.Active == true && obj.Username.ToUpper() == user.Username).ToListAsync();
+            var objUser = await _unitOfWork.Users.Get().Where(obj => obj.Active == true && obj.Username.ToUpper() == user.Username.ToUpper()).ToListAsync();
             if (objUser.Count > 0) { throw new Exception(Messages.ExistingUserName); }
         }
 

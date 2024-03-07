@@ -82,7 +82,7 @@ namespace Sales.API.Controllers.UserControllers
         {
             try
             {
-                await _userService.Active(id);
+                await _userService.Activate(id);
                 return Ok(new ApiResponseDto { Message = Messages.DeletedData });
             }
             catch (Exception ex)
