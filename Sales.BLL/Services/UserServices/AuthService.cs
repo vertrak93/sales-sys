@@ -91,7 +91,7 @@ namespace Sales.BLL.Services
 
         public async Task<UserDto> ValidateLogin(AuthenticateDto auth)
         {
-            var objUser = await _unitOfWork.Users.Get().Where(el => el.Username.ToUpper() == auth.Username.Trim().ToUpper()).FirstOrDefaultAsync();
+            var objUser = await _unitOfWork.Users.Get().Where(el => el.Username.ToUpper() == auth.Username.Trim().ToUpper() && el.Active == true ).FirstOrDefaultAsync();
 
             if (objUser == null) { throw new Exception(Messages.UserDontExist); }
 

@@ -4,6 +4,7 @@ using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,17 +31,27 @@ namespace Sales.BLL.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<CategoryDto>> Get()
+        public async Task<(IEnumerable<CategoryDto>, int)> Get(PaginationParams paginationParams)
         {
-            var obj = await _unitOfWork.Categories.Get().Where(o => o.Active == true).ToListAsync();
+            var category = _unitOfWork.Categories.Get()
+                    .Where(o => o.Active == true)
+                    .Select(o => new CategoryDto
+                    {
+                        CategoryId = o.CategoryId,
+                        CategoryName = o.CategoryName
+                    });
 
-            return obj.Where(o => o.Active == true).Select(o => {
-                return new CategoryDto
-                {
-                    CategoryId = o.CategoryId,
-                    CategoryName = o.CategoryName
-                };
-            });
+            if (!string.IsNullOrEmpty(paginationParams.Filter))
+            {
+                category = category.Where(item =>
+                    item.CategoryName.ToUpper().Contains(paginationParams.Filter.ToUpper()));
+            }
+
+            var total = (await category.CountAsync());
+            var result = await category.Skip(paginationParams.Start)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
+            return (result, total);
         }
 
         public async Task<bool> Update(CategoryDto category)

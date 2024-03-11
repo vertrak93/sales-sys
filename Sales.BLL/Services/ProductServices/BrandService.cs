@@ -4,6 +4,7 @@ using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,16 +31,27 @@ namespace Sales.BLL.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<BrandDto>> Get()
+        public async Task<(IEnumerable<BrandDto>, int)> Get(PaginationParams paginationParams)
         {
-            var obj = await _unitOfWork.Brands.Get().Where(o => o.Active == true).ToListAsync();
+            var brands = _unitOfWork.Brands.Get()
+                    .Where(ol => ol.Active == true)
+                    .Select(o => new BrandDto
+                    {
+                        BrandId = o.BrandId,
+                        BrandName = o.BrandName
+                    });
 
-            return obj.Select(o => { return new BrandDto 
-                { 
-                    BrandId = o.BrandId, 
-                    BrandName = o.BrandName 
-                }; 
-            });
+            if (!string.IsNullOrEmpty(paginationParams.Filter))
+            {
+                brands = brands.Where(item =>
+                    item.BrandName.ToUpper().Contains(paginationParams.Filter.ToUpper()));
+            }
+
+            var total = (await brands.CountAsync());
+            var result = await brands.Skip(paginationParams.Start)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
+            return (result, total);
         }
 
         public async Task<BrandDto> Get(int id)
