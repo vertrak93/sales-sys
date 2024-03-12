@@ -4,6 +4,7 @@ using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,17 +31,28 @@ namespace Sales.BLL.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<PresentationDto>> Get()
+        public async Task<(IEnumerable<PresentationDto>,int)> Get(PaginationParams paginationParams)
         {
-            var obj = await _unitOfWork.Presentations.Get().Where(o => o.Active == true).ToListAsync();
-
-            return obj.Where(o => o.Active == true).Select(o => {
-                return new PresentationDto
+            var presentation = _unitOfWork.Presentations.Get()
+                .Where(o => o.Active == true)
+                .Select(o=> new PresentationDto
                 {
                     PresentationId = o.PresentationId,
                     PresentationName = o.PresentationName
-                };
-            });
+                });
+
+            if (!string.IsNullOrEmpty(paginationParams.Filter))
+            {
+                presentation = presentation.Where(item =>
+                    item.PresentationName.ToUpper().Contains(paginationParams.Filter.ToUpper()));
+            }
+
+            var total = (await presentation.CountAsync());
+            var result = await presentation.Skip(paginationParams.Start)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
+            return (result, total);
+
         }
 
         public async Task<bool> Update(PresentationDto presentation)

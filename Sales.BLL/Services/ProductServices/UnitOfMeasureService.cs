@@ -4,6 +4,7 @@ using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,18 +31,29 @@ namespace Sales.BLL.Services.ProductServices
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<UnitOfMeasureDto>> Get()
+        public async Task<(IEnumerable<UnitOfMeasureDto>,int)> Get(PaginationParams paginationParams)
         {
-            var obj = await _unitOfWork.UnitOfMeasures.Get().ToListAsync();
-
-            return obj.Where(o => o.Active == true).Select(o => {
-                return new UnitOfMeasureDto
+            var unitOfMeasure = _unitOfWork.UnitOfMeasures.Get()
+                .Where(o => o.Active == true)
+                .Select(o => new UnitOfMeasureDto
                 {
                     UnitOfMeasureId = o.UnitOfMeasureId,
                     UnitOfMeasureName = o.UnitOfMeasureName,
                     Abbreviation = o.Abbreviation,
-                };
-            });
+                });
+
+            if (!string.IsNullOrEmpty(paginationParams.Filter))
+            {
+                unitOfMeasure = unitOfMeasure.Where(item =>
+                    item.UnitOfMeasureName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.Abbreviation.ToUpper().Contains(paginationParams.Filter.ToUpper()));
+            }
+
+            var total = (await unitOfMeasure.CountAsync());
+            var result = await unitOfMeasure.Skip(paginationParams.Start)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
+            return (result, total);
         }
 
         public async Task<bool> Update(UnitOfMeasureDto unitOfMeasure)

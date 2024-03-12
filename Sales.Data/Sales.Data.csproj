@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Sales.Utils\Sales.Utils.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

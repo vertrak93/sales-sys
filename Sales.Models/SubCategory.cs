@@ -18,7 +18,7 @@ namespace Sales.Models
         public int CategoryId { get; set; }
 
         [Required, StringLength(100)]
-        public string NameSubCatagory { get; set; }
+        public string SubCategoryName { get; set; }
 
         public virtual Category Category { get; set; }
 

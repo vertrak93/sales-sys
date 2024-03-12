@@ -6,6 +6,7 @@ using Sales.BLL.Services;
 using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 
 namespace Sales.API.Controllers.ProductControllers
 {
@@ -28,12 +29,12 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponseDto>> Get()
+        public async Task<ActionResult<ApiResponseDto>> Get(PaginationParams paginationParams)
         {
             try
             {
-                var obj = await _productService.Get();
-                return Ok(new ApiResponseDto { Data = obj, Message = Messages.GetedData });
+                var (data, total) = await _productService.Get(paginationParams);
+                return Ok(new ApiResponseDto { Data = data, Total = total, Message = Messages.GetedData });
             }
             catch (Exception ex)
             {

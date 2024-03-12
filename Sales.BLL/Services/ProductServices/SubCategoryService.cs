@@ -4,6 +4,7 @@ using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,18 +31,31 @@ namespace Sales.BLL.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<SubCategoryDto>> Get()
+        public async Task<(IEnumerable<SubCategoryDto>,int)> Get(PaginationParams paginationParams)
         {
-            var obj = await _unitOfWork.SubCategories.Get().ToListAsync();
+            var subCategories = from a in _unitOfWork.SubCategories.Get()
+                                join b in _unitOfWork.Categories.Get() on a.CategoryId equals b.CategoryId
+                                where a.Active == true && b.Active == true
+                                select new SubCategoryDto
+                                {
+                                    SubCategoryId = a.SubCategoryId,
+                                    SubCategoryName = a.SubCategoryName,
+                                    CategoryId = b.CategoryId,
+                                    CategoryName = b.CategoryName
+                                };
 
-            return obj.Where(o => o.Active == true).Select(o => {
-                return new SubCategoryDto
-                {
-                    SubCategoryId = o.SubCategoryId,
-                    CategoryId= o.CategoryId,
-                    NameSubCatagory = o.NameSubCatagory
-                };
-            });
+            if (!string.IsNullOrEmpty(paginationParams.Filter))
+            {
+                subCategories = subCategories.Where(item =>
+                    item.SubCategoryName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.CategoryName.ToUpper().Contains(paginationParams.Filter.ToUpper()) );
+            }
+
+            var total = (await subCategories.CountAsync());
+            var result = await subCategories.Skip(paginationParams.Start)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
+            return (result, total);
         }
 
         public async Task<bool> Update(SubCategoryDto subCategory)

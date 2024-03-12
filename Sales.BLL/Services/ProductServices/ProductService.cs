@@ -5,6 +5,7 @@ using Sales.Data.UnitOfWork;
 using Sales.DTOs;
 using Sales.Models;
 using Sales.Utils.Constants;
+using Sales.Utils.UtilsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,9 +41,9 @@ namespace Sales.BLL.Services
             return new ProductDto { ProductId = obj.ProductId };
         }
 
-        public async Task<IEnumerable<ProductDto>> Get()
+        public async Task<(IEnumerable<ProductDto>,int)> Get(PaginationParams paginationParams)
         {
-            var obj = from a in _unitOfWork.Products.Get()
+            var products = from a in _unitOfWork.Products.Get()
                       join b in _unitOfWork.Categories.Get() on a.CategoryId equals b.CategoryId
                       join c in _unitOfWork.Brands.Get() on a.BrandId equals c.BrandId
                       join d in _unitOfWork.Presentations.Get() on a.PresentationId equals d.PresentationId
@@ -60,7 +61,7 @@ namespace Sales.BLL.Services
                           CategoryId = a.CategoryId,
                           CategoryName = b.CategoryName,
                           SubCategoryId = a.SubCategoryId,
-                          SubCategoryName = subCat.NameSubCatagory,
+                          SubCategoryName = subCat.SubCategoryName,
                           BrandId = a.BrandId,
                           BrandName = c.BrandName,
                           PresentationId = a.PresentationId,
@@ -74,9 +75,23 @@ namespace Sales.BLL.Services
                           IsContainer = a.IsContainer
                       };
 
-            var dbObj = await obj.ToListAsync();
+            if (!string.IsNullOrEmpty(paginationParams.Filter))
+            {
+                products = products.Where(item =>
+                    item.CategoryName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.SubCategoryName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.BrandName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.PresentationName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.UnitOfMeasureName.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.UnitOfMeasureAbbreviation.ToUpper().Contains(paginationParams.Filter.ToUpper()) ||
+                    item.SKU.ToUpper().Contains(paginationParams.Filter.ToUpper()) );
+            }
 
-            return dbObj;
+            var total = (await products.CountAsync());
+            var result = await products.Skip(paginationParams.Start)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
+            return (result, total);
         }
 
         public async Task<ProductDto> GetById(int ProductId)
@@ -98,7 +113,7 @@ namespace Sales.BLL.Services
                           CategoryId = a.CategoryId,
                           CategoryName = b.CategoryName,
                           SubCategoryId = a.SubCategoryId,
-                          SubCategoryName = subCat.NameSubCatagory,
+                          SubCategoryName = subCat.SubCategoryName,
                           BrandId = a.BrandId,
                           BrandName = c.BrandName,
                           PresentationId = a.PresentationId,

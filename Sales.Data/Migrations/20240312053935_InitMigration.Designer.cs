@@ -12,7 +12,7 @@ using Sales.Data.DataContext;
 namespace Sales.Data.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    [Migration("20240211020939_InitMigration")]
+    [Migration("20240312053935_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
@@ -811,7 +811,7 @@ namespace Sales.Data.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("NameSubCatagory")
+                    b.Property<string>("SubCatagoryName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
