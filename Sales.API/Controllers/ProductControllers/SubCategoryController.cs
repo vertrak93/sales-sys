@@ -25,7 +25,7 @@ namespace Sales.API.Controllers.ProductControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponseDto>> Get(PaginationParams paginationParams)
+        public async Task<ActionResult<ApiResponseDto>> Get([FromQuery] PaginationParams paginationParams)
         {
             try
             {
